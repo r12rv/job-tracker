@@ -1,37 +1,31 @@
 {
   "name": "job-tracker",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "typecheck": "tsc -b",
+    "dev": "npm run dev -w @job-tracker/web",
+    "dev:api": "npm run dev -w @job-tracker/api",
+    "build": "npm run build -w @job-tracker/web",
+    "typecheck": "npm run typecheck --workspaces --if-present",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "preview": "vite preview"
+    "lint:fix": "eslint . --fix"
   },
   "engines": {
     "node": ">=22.12.0"
   },
-  "dependencies": {
-    "react": "^19.3.1",
-    "react-dom": "^19.3.1"
-  },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@tailwindcss/vite": "^4.3.5",
-    "@types/react": "^19.3.0",
-    "@types/react-dom": "^19.3.0",
-    "@vitejs/plugin-react": "^6.3.0",
     "eslint": "^10.14.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.7",
     "globals": "^17.14.0",
-    "tailwindcss": "^4.3.5",
     "typescript": "~6.0.3",
-    "typescript-eslint": "^8.72.2",
-    "vite": "^8.3.8"
+    "typescript-eslint": "^8.72.2"
   },
   "overrides": {
     "minimatch": "^11.0.7"

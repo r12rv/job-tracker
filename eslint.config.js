@@ -6,20 +6,16 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default defineConfig([
-  globalIgnores(['dist', 'node_modules']),
+  globalIgnores(['**/dist', '**/node_modules']),
+
+  // Общие правила для всего TypeScript-кода монорепозитория
   {
     files: ['**/*.{ts,tsx}'],
-    extends: [
-      js.configs.recommended,
-      tseslint.configs.strictTypeChecked,
-      tseslint.configs.stylisticTypeChecked,
-      reactHooks.configs.flat.recommended,
-      reactRefresh.configs.vite,
-    ],
+    extends: [js.configs.recommended, tseslint.configs.strictTypeChecked, tseslint.configs.stylisticTypeChecked],
     languageOptions: {
       ecmaVersion: 2022,
-      globals: globals.browser,
       parserOptions: {
+        // Каждый файл проверяется с tsconfig своего пакета
         projectService: true,
         tsconfigRootDir: import.meta.dirname,
       },
@@ -40,6 +36,20 @@ export default defineConfig([
       '@typescript-eslint/consistent-type-definitions': 'off',
     },
   },
+
+  // Фронтенд: браузер + React
+  {
+    files: ['apps/web/**/*.{ts,tsx}'],
+    extends: [reactHooks.configs.flat.recommended, reactRefresh.configs.vite],
+    languageOptions: { globals: globals.browser },
+  },
+
+  // API: Node.js
+  {
+    files: ['apps/api/**/*.ts'],
+    languageOptions: { globals: globals.node },
+  },
+
   {
     files: ['eslint.config.js'],
     extends: [js.configs.recommended],
