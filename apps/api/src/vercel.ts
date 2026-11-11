@@ -1,15 +1,16 @@
 import { createApp } from './app';
+import { authConfigFromEnv, createAuth } from './auth';
 import { createDb } from './db/client';
 import { readEnv } from './env';
 
 /**
  * Точка входа серверной функции Vercel.
  * Модуль переиспользуется между запросами, пока функция «тёплая», —
- * поэтому подключение к базе создаётся один раз при холодном старте.
+ * поэтому подключение к базе и Better Auth создаются один раз при холодном старте.
  */
 const env = readEnv();
 const { db } = createDb(env.DATABASE_URL);
-const app = createApp({ db, enableVacancies: env.ENABLE_VACANCIES_API });
+const app = createApp({ db, auth: createAuth(db, authConfigFromEnv(env)) });
 
 const handler = (request: Request) => app.fetch(request);
 

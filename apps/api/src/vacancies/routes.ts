@@ -1,6 +1,7 @@
 import { vacancyInputSchema, vacancyStatusUpdateSchema } from '@job-tracker/shared';
 import { zValidator } from '@hono/zod-validator';
 import { Hono, type ValidationTargets } from 'hono';
+import type { AuthedEnv } from '../app';
 import { z } from 'zod';
 import type { VacancyRepository } from './repository';
 
@@ -31,31 +32,32 @@ function validate<Target extends keyof ValidationTargets, Schema extends z.ZodTy
 const notFound = { error: 'not_found' } as const;
 
 export function createVacancyRoutes(repository: VacancyRepository) {
-  return new Hono()
-    .get('/', async (c) => c.json(await repository.list()))
+  // userId кладёт middleware requireUser в app.ts — до этих маршрутов без сессии не дойти
+  return new Hono<AuthedEnv>()
+    .get('/', async (c) => c.json(await repository.list(c.get('userId'))))
 
     .get('/:id', validate('param', idParamSchema), async (c) => {
-      const vacancy = await repository.findById(c.req.valid('param').id);
+      const vacancy = await repository.findById(c.get('userId'), c.req.valid('param').id);
       return vacancy ? c.json(vacancy) : c.json(notFound, 404);
     })
 
     .post('/', validate('json', vacancyInputSchema), async (c) => {
-      const vacancy = await repository.create(c.req.valid('json'));
+      const vacancy = await repository.create(c.get('userId'), c.req.valid('json'));
       return c.json(vacancy, 201);
     })
 
     .put('/:id', validate('param', idParamSchema), validate('json', vacancyInputSchema), async (c) => {
-      const vacancy = await repository.update(c.req.valid('param').id, c.req.valid('json'));
+      const vacancy = await repository.update(c.get('userId'), c.req.valid('param').id, c.req.valid('json'));
       return vacancy ? c.json(vacancy) : c.json(notFound, 404);
     })
 
     .patch('/:id/status', validate('param', idParamSchema), validate('json', vacancyStatusUpdateSchema), async (c) => {
-      const vacancy = await repository.setStatus(c.req.valid('param').id, c.req.valid('json').status);
+      const vacancy = await repository.setStatus(c.get('userId'), c.req.valid('param').id, c.req.valid('json').status);
       return vacancy ? c.json(vacancy) : c.json(notFound, 404);
     })
 
     .delete('/:id', validate('param', idParamSchema), async (c) => {
-      const deleted = await repository.remove(c.req.valid('param').id);
+      const deleted = await repository.remove(c.get('userId'), c.req.valid('param').id);
       return deleted ? c.body(null, 204) : c.json(notFound, 404);
     });
 }

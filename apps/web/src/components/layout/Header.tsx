@@ -1,3 +1,4 @@
+import { UserMenu } from '../auth/UserMenu';
 import { Button } from '../ui/Button';
 import { BriefcaseIcon, PlusIcon } from '../ui/Icons';
 
@@ -13,13 +14,15 @@ export function Header({ onAdd }: HeaderProps) {
           <span className="flex size-8 items-center justify-center rounded-lg bg-indigo-600 text-white">
             <BriefcaseIcon className="size-4" />
           </span>
-          <h1 className="text-base font-semibold text-slate-900 sm:text-lg">Трекер откликов</h1>
+          <h1 className="text-base font-semibold whitespace-nowrap text-slate-900 sm:text-lg">Трекер откликов</h1>
         </div>
-        <Button onClick={onAdd} aria-label="Добавить вакансию">
-          <PlusIcon />
-          <span className="hidden sm:inline">Добавить вакансию</span>
-          <span className="sm:hidden">Добавить</span>
-        </Button>
+        <div className="flex items-center gap-2 sm:gap-3">
+          <Button onClick={onAdd} aria-label="Добавить вакансию" className="px-2.5 sm:px-4">
+            <PlusIcon />
+            <span className="hidden sm:inline">Добавить вакансию</span>
+          </Button>
+          <UserMenu />
+        </div>
       </div>
     </header>
   );

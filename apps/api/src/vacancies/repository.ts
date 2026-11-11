@@ -1,5 +1,5 @@
 import type { Vacancy, VacancyInput, VacancyStatus } from '@job-tracker/shared';
-import { asc, desc, eq, sql } from 'drizzle-orm';
+import { and, asc, desc, eq, sql } from 'drizzle-orm';
 import type { Db } from '../db/client';
 import { vacancies, vacancyStatusChanges } from '../db/schema';
 
@@ -54,79 +54,94 @@ const withHistory = {
   statusHistory: { orderBy: [asc(vacancyStatusChanges.changedAt)] },
 };
 
+/** Условие «вакансия с этим id принадлежит этому пользователю» */
+function owned(userId: string, id: string) {
+  return and(eq(vacancies.id, id), eq(vacancies.userId, userId));
+}
+
+/**
+ * Все методы принимают userId и работают только с вакансиями этого пользователя.
+ * Чужая вакансия неотличима от несуществующей (404, а не 403) — так нельзя даже узнать, что она есть.
+ */
 export function createVacancyRepository(db: Db) {
-  async function findById(id: string): Promise<Vacancy | undefined> {
+  async function findById(userId: string, id: string): Promise<Vacancy | undefined> {
     const row = await db.query.vacancies.findFirst({
-      where: eq(vacancies.id, id),
+      where: owned(userId, id),
       with: withHistory,
     });
     return row && toVacancy(row);
   }
 
+  /** Блокирует строку до конца транзакции и возвращает текущий статус, если вакансия своя */
+  async function lockOwned(tx: Parameters<Parameters<Db['transaction']>[0]>[0], userId: string, id: string) {
+    const [current] = await tx
+      .select({ status: vacancies.status })
+      .from(vacancies)
+      .where(owned(userId, id))
+      .for('update');
+    return current;
+  }
+
   return {
     findById,
 
-    async list(): Promise<Vacancy[]> {
+    async list(userId: string): Promise<Vacancy[]> {
       const rows = await db.query.vacancies.findMany({
+        where: eq(vacancies.userId, userId),
         with: withHistory,
         orderBy: [desc(vacancies.appliedAt), desc(vacancies.createdAt)],
       });
       return rows.map(toVacancy);
     },
 
-    async create(input: VacancyInput): Promise<Vacancy> {
+    async create(userId: string, input: VacancyInput): Promise<Vacancy> {
       const id = await db.transaction(async (tx) => {
-        const [created] = await tx.insert(vacancies).values(toColumns(input)).returning({ id: vacancies.id });
+        const [created] = await tx
+          .insert(vacancies)
+          .values({ ...toColumns(input), userId })
+          .returning({ id: vacancies.id });
         if (!created) throw new Error('Insert returned no rows');
         await tx.insert(vacancyStatusChanges).values({ vacancyId: created.id, status: input.status });
         return created.id;
       });
-      const vacancy = await findById(id);
+      const vacancy = await findById(userId, id);
       if (!vacancy) throw new Error('Created vacancy not found');
       return vacancy;
     },
 
     /** Полное обновление. Смена статуса дописывается в историю */
-    async update(id: string, input: VacancyInput): Promise<Vacancy | undefined> {
+    async update(userId: string, id: string, input: VacancyInput): Promise<Vacancy | undefined> {
       const updated = await db.transaction(async (tx) => {
-        const [current] = await tx
-          .select({ status: vacancies.status })
-          .from(vacancies)
-          .where(eq(vacancies.id, id))
-          .for('update');
+        const current = await lockOwned(tx, userId, id);
         if (!current) return false;
 
         await tx
           .update(vacancies)
           .set({ ...toColumns(input), updatedAt: sql`now()` })
-          .where(eq(vacancies.id, id));
+          .where(owned(userId, id));
         if (current.status !== input.status) {
           await tx.insert(vacancyStatusChanges).values({ vacancyId: id, status: input.status });
         }
         return true;
       });
-      return updated ? findById(id) : undefined;
+      return updated ? findById(userId, id) : undefined;
     },
 
-    async setStatus(id: string, status: VacancyStatus): Promise<Vacancy | undefined> {
+    async setStatus(userId: string, id: string, status: VacancyStatus): Promise<Vacancy | undefined> {
       const updated = await db.transaction(async (tx) => {
-        const [current] = await tx
-          .select({ status: vacancies.status })
-          .from(vacancies)
-          .where(eq(vacancies.id, id))
-          .for('update');
+        const current = await lockOwned(tx, userId, id);
         if (!current) return false;
         if (current.status === status) return true;
 
-        await tx.update(vacancies).set({ status, updatedAt: sql`now()` }).where(eq(vacancies.id, id));
+        await tx.update(vacancies).set({ status, updatedAt: sql`now()` }).where(owned(userId, id));
         await tx.insert(vacancyStatusChanges).values({ vacancyId: id, status });
         return true;
       });
-      return updated ? findById(id) : undefined;
+      return updated ? findById(userId, id) : undefined;
     },
 
-    async remove(id: string): Promise<boolean> {
-      const deleted = await db.delete(vacancies).where(eq(vacancies.id, id)).returning({ id: vacancies.id });
+    async remove(userId: string, id: string): Promise<boolean> {
+      const deleted = await db.delete(vacancies).where(owned(userId, id)).returning({ id: vacancies.id });
       return deleted.length > 0;
     },
   };
