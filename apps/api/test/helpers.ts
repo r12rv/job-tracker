@@ -17,7 +17,7 @@ export function testDatabaseUrl(): string {
 
 export function createTestContext() {
   const { db, close } = createDb(testDatabaseUrl());
-  const app = createApp({ db });
+  const app = createApp({ db, enableVacancies: true });
 
   async function request(method: string, path: string, body?: unknown) {
     const init: RequestInit = { method };

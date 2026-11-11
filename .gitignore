@@ -8,3 +8,6 @@ dist
 .env
 .env.*
 !.env.example
+
+# Результат сборки для Vercel (Build Output API)
+.vercel

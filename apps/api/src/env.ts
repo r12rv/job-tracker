@@ -15,6 +15,8 @@ export function loadLocalEnv(path = '.env'): void {
 const envSchema = z.object({
   DATABASE_URL: z.url({ protocol: /^postgres(ql)?$/, error: 'DATABASE_URL должен быть строкой подключения postgres://' }),
   PORT: z.coerce.number().int().positive().default(3001),
+  // Выключено по умолчанию: на Vercel CRUD закрыт до появления авторизации
+  ENABLE_VACANCIES_API: z.stringbool().default(false),
 });
 
 export type Env = z.infer<typeof envSchema>;

@@ -11,7 +11,7 @@
     "dev": "npm run dev -w @job-tracker/web",
     "dev:api": "npm run dev -w @job-tracker/api",
     "build": "npm run build -w @job-tracker/web",
-    "typecheck": "npm run typecheck --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present && tsc -p scripts",
     "test": "npm run test --workspaces --if-present",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -19,17 +19,21 @@
     "db:down": "docker compose down",
     "db:generate": "npm run db:generate -w @job-tracker/api",
     "db:migrate": "npm run db:migrate -w @job-tracker/api",
-    "db:studio": "npm run db:studio -w @job-tracker/api"
+    "db:studio": "npm run db:studio -w @job-tracker/api",
+    "build:vercel": "tsx scripts/build-vercel.ts"
   },
   "engines": {
     "node": ">=22.12.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@types/node": "^22.20.5",
+    "esbuild": "^0.28.2",
     "eslint": "^10.14.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.7",
     "globals": "^17.14.0",
+    "tsx": "^4.23.15",
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.72.2"
   },

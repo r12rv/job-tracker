@@ -6,7 +6,7 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default defineConfig([
-  globalIgnores(['**/dist', '**/node_modules']),
+  globalIgnores(['**/dist', '**/node_modules', '.vercel']),
 
   // Общие правила для всего TypeScript-кода монорепозитория
   {
