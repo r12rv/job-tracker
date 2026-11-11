@@ -1,6 +1,16 @@
 # Трекер откликов на вакансии
 
+[![CI](https://github.com/r12rv/job-tracker/actions/workflows/ci.yml/badge.svg)](https://github.com/r12rv/job-tracker/actions/workflows/ci.yml)
+
+**Демо:** https://job-tracker-olive-one.vercel.app
+
 React + TypeScript + Vite + Tailwind CSS. Данные хранятся в `localStorage` браузера.
+
+## Процесс разработки
+
+- Изменения попадают в `main` только через pull request; прямой push запрещён.
+- Каждый PR проходит CI (lint, typecheck, build) и получает превью-деплой на Vercel.
+- После слияния в `main` продакшен обновляется автоматически.
 
 ## Запуск
 
