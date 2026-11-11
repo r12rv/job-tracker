@@ -6,7 +6,7 @@ import { loadLocalEnv, readEnv } from './env';
 loadLocalEnv();
 const env = readEnv();
 const { db, close } = createDb(env.DATABASE_URL);
-const app = createApp({ db });
+const app = createApp({ db, enableVacancies: env.ENABLE_VACANCIES_API });
 
 const server = serve({ fetch: app.fetch, port: env.PORT }, (info) => {
   console.log(`API: http://localhost:${info.port}/api/health`);

@@ -1,5 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { afterAll, beforeEach, describe, expect, it } from 'vitest';
+import { createApp } from '../src/app';
+import { createDb } from '../src/db/client';
 import { vacancies } from '../src/db/schema';
 import { asVacancy, createTestContext, vacancyInput } from './helpers';
 
@@ -20,10 +22,35 @@ async function createVacancy(overrides: Parameters<typeof vacancyInput>[0] = {})
 }
 
 describe('GET /api/health', () => {
-  it('отвечает ok', async () => {
+  it('отвечает ok и проверяет связь с базой', async () => {
     const { status, json } = await ctx.request('GET', '/api/health');
     expect(status).toBe(200);
-    expect(json).toEqual({ status: 'ok' });
+    expect(json).toEqual({ status: 'ok', database: 'ok' });
+  });
+
+  it('503, если база недоступна', async () => {
+    const { db, close } = createDb('postgres://nobody:nobody@127.0.0.1:1/none');
+    try {
+      const response = await createApp({ db, enableVacancies: false }).request('/api/health');
+      expect(response.status).toBe(503);
+      expect(await response.json()).toEqual({ status: 'error', database: 'unreachable' });
+    } finally {
+      await close();
+    }
+  });
+});
+
+describe('флаг enableVacancies', () => {
+  it('без флага маршруты вакансий недоступны (так API работает в облаке до авторизации)', async () => {
+    const app = createApp({ db: ctx.db, enableVacancies: false });
+    for (const [method, path] of [
+      ['GET', '/api/vacancies'],
+      ['POST', '/api/vacancies'],
+      ['DELETE', `/api/vacancies/${randomUUID()}`],
+    ] as const) {
+      const response = await app.request(path, { method });
+      expect(response.status, `${method} ${path}`).toBe(404);
+    }
   });
 });
 
