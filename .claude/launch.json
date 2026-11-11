@@ -4,8 +4,14 @@
     {
       "name": "dev",
       "runtimeExecutable": "zsh",
-      "runtimeArgs": ["-c", "source \"${NVM_DIR:-$HOME/.nvm}/nvm.sh\" && nvm use >/dev/null && npm run dev -- --port 5173 --strictPort"],
+      "runtimeArgs": ["-c", "source \"${NVM_DIR:-$HOME/.nvm}/nvm.sh\" && nvm use >/dev/null && npm run dev -w @job-tracker/web -- --port 5173 --strictPort"],
       "port": 5173
+    },
+    {
+      "name": "api",
+      "runtimeExecutable": "zsh",
+      "runtimeArgs": ["-c", "source \"${NVM_DIR:-$HOME/.nvm}/nvm.sh\" && nvm use >/dev/null && PORT=3001 npm run dev:api"],
+      "port": 3001
     }
   ]
 }

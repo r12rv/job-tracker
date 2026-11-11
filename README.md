@@ -19,20 +19,35 @@ React + TypeScript + Vite + Tailwind CSS. Данные хранятся в `loca
 ```bash
 nvm use
 npm install
-npm run dev
+npm run dev       # фронтенд: http://localhost:5173
+npm run dev:api   # API:      http://localhost:3001/api/health
 ```
 
-- `npm run build` — проверка типов и сборка
-- `npm run typecheck` — только проверка типов
-- `npm run lint` / `npm run lint:fix` — ESLint (strict + type-checked, `any` запрещён)
+Команды запускаются из корня репозитория:
+
+- `npm run build` — проверка типов и сборка фронтенда
+- `npm run typecheck` — проверка типов во всех пакетах
+- `npm run lint` / `npm run lint:fix` — ESLint по всему монорепозиторию (strict + type-checked, `any` запрещён)
 
 ## Структура
 
-- `src/types` — типы предметной области
-- `src/constants` — статусы, их подписи и цвета, ключ хранилища
-- `src/hooks` — `useLocalStorage`, `useVacancies` (CRUD), `useFilteredVacancies`, `useStats`
-- `src/utils` — форматирование, валидация формы, проверка данных из хранилища
-- `src/components` — UI по разделам: `kanban`, `table`, `stats`, `filters`, `vacancy`, `ui`, `layout`
+Монорепозиторий на npm workspaces:
+
+```
+apps/web         — фронтенд (React + Vite + Tailwind)
+apps/api         — API (Hono), пока заготовка с /api/health
+packages/shared  — общие Zod-схемы и типы
+```
+
+- `packages/shared` — единый источник правды о данных: из схем выводятся типы TypeScript,
+  а строгая схема ввода (`vacancyInputSchema`) проверяет форму на фронтенде и будет проверять запросы в API.
+- `apps/web/src`:
+  - `types` — UI-типы (форма, фильтры, статистика) и реэкспорт доменных типов
+  - `constants` — статусы, их подписи и цвета, ключ хранилища
+  - `hooks` — `useLocalStorage`, `useVacancies` (CRUD), `useFilteredVacancies`, `useStats`
+  - `utils` — форматирование, валидация формы через общую схему, разбор данных из хранилища
+  - `components` — UI по разделам: `kanban`, `table`, `stats`, `filters`, `vacancy`, `ui`, `layout`
+- `apps/api/src/app.ts` — приложение Hono без привязки к рантайму; `index.ts` запускает его на Node.
 
 ## Как считается статистика
 
