@@ -6,15 +6,26 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "start": "tsx src/index.ts",
-    "typecheck": "tsc -p ."
+    "typecheck": "tsc -p .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx src/db/migrate.ts",
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
     "@hono/node-server": "^2.1.6",
+    "@hono/zod-validator": "^0.9.1",
     "@job-tracker/shared": "*",
-    "hono": "^4.13.17"
+    "drizzle-orm": "^0.45.4",
+    "hono": "^4.13.17",
+    "postgres": "^4.1.1",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@types/node": "^22.20.5",
-    "tsx": "^4.23.15"
+    "drizzle-kit": "^0.31.11",
+    "tsx": "^4.23.15",
+    "vitest": "^5.1.0"
   }
 }

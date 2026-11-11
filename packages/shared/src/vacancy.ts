@@ -50,6 +50,10 @@ export const vacancyInputSchema = z.object({
 });
 export type VacancyInput = z.infer<typeof vacancyInputSchema>;
 
+/** Тело запроса на смену статуса */
+export const vacancyStatusUpdateSchema = z.object({ status: vacancyStatusSchema });
+export type VacancyStatusUpdate = z.infer<typeof vacancyStatusUpdateSchema>;
+
 /**
  * Сохранённая вакансия. Проверяет только структуру, без бизнес-правил ввода:
  * так ранее сохранённые данные не отбрасываются, если правила формы станут строже.
