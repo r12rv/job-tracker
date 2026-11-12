@@ -87,3 +87,32 @@ export const BriefcaseIcon = (props: IconProps) => (
     <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2M2 13h20" />
   </Icon>
 );
+
+export const HistoryIcon = (props: IconProps) => (
+  <Icon {...props}>
+    <path d="M3 12a9 9 0 1 0 3-6.7L3 8" />
+    <path d="M3 3v5h5M12 7v5l3 2" />
+  </Icon>
+);
+
+export const ChartIcon = (props: IconProps) => (
+  <Icon {...props}>
+    <path d="M3 3v18h18" />
+    <path d="M7 15l4-4 3 3 5-6" />
+  </Icon>
+);
+
+export const DevicesIcon = (props: IconProps) => (
+  <Icon {...props}>
+    <rect x="2" y="4" width="14" height="10" rx="1.5" />
+    <path d="M6 18h6" />
+    <rect x="17" y="8" width="5" height="12" rx="1" />
+  </Icon>
+);
+
+export const ResetIcon = (props: IconProps) => (
+  <Icon {...props}>
+    <path d="M3 12a9 9 0 1 0 2.6-6.4L3 8" />
+    <path d="M3 3v5h5" />
+  </Icon>
+);

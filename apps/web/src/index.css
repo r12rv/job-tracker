@@ -8,6 +8,13 @@ html {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Плавная прокрутка к якорям (кнопка «Посмотреть демо»), если пользователь не просил уменьшить анимацию */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
 body {
   @apply bg-slate-50 text-slate-900 antialiased;
 }
