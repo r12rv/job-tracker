@@ -17,6 +17,8 @@ interface TrackerBoardProps {
   view: ViewMode;
   onViewChange: (view: ViewMode) => void;
   onStatusChange: (id: string, status: VacancyStatus) => void;
+  /** Перетаскивание в канбане: колонка и карточка, после которой встать (null — в начало) */
+  onMove: (id: string, status: VacancyStatus, afterId: string | null) => void;
   onEdit: (vacancy: Vacancy) => void;
   onDelete: (vacancy: Vacancy) => void;
   /** Что показать, когда вакансий нет совсем */
@@ -33,6 +35,7 @@ export function TrackerBoard({
   view,
   onViewChange,
   onStatusChange,
+  onMove,
   onEdit,
   onDelete,
   emptyState,
@@ -85,6 +88,7 @@ export function TrackerBoard({
               vacancies={filtered}
               statusFilter={filters.status}
               onStatusChange={onStatusChange}
+              onMove={onMove}
               onEdit={onEdit}
               onDelete={onDelete}
             />

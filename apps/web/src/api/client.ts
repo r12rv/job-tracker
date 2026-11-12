@@ -48,6 +48,7 @@ export function describeError(error: unknown): string {
   if (error.status === 0) return 'Нет соединения с сервером. Проверьте интернет.';
   if (error.status === 401) return 'Сессия истекла — войдите снова.';
   if (error.status === 404) return 'Вакансия не найдена — возможно, её уже удалили.';
+  if (error.status === 409) return 'Данные изменились на другом устройстве — показываем актуальный порядок.';
   if (error.status === 400) return 'Сервер не принял данные. Проверьте поля формы.';
   return 'Ошибка на сервере. Попробуйте ещё раз чуть позже.';
 }

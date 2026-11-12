@@ -36,7 +36,7 @@ interface TrackerPageProps {
 }
 
 export function TrackerPage({ userId }: TrackerPageProps) {
-  const { vacancies, isLoading, loadError, refetch, create, update, changeStatus, remove } = useVacancies(userId);
+  const { vacancies, isLoading, loadError, refetch, create, update, changeStatus, move, remove } = useVacancies(userId);
 
   const [view, setView] = useLocalStorage<ViewMode>('job-tracker:view', 'kanban', parseViewMode);
   const [editor, setEditor] = useState<EditorState>({ mode: 'closed' });
@@ -83,6 +83,7 @@ export function TrackerPage({ userId }: TrackerPageProps) {
         view={view}
         onViewChange={setView}
         onStatusChange={changeStatus}
+        onMove={move}
         onEdit={openEdit}
         onDelete={setPendingDelete}
         emptyState={

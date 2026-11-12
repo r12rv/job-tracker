@@ -1,13 +1,16 @@
 import { useMutation, useQuery, useQueryClient, type QueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { api, call, describeError } from '../api/client';
+import { api, ApiError, call, describeError } from '../api/client';
 import type { Vacancy, VacancyInput, VacancyStatus } from '../types/vacancy';
-import { withStatus } from '../utils/vacancy';
+import { applyMove } from '../utils/vacancy';
 
 /** Ключ кэша включает id пользователя: после смены аккаунта чужие данные не покажутся даже на миг */
 export const vacanciesKey = (userId: string) => ['vacancies', userId] as const;
 
-/** Тот же порядок, что отдаёт сервер: свежие отклики сверху */
+/** Ключ мутаций перетаскивания: по нему видно, сколько перемещений ещё ждут ответа сервера */
+const moveKey = (userId: string) => ['vacancies', userId, 'move'] as const;
+
+/** Тот же порядок, что отдаёт сервер: свежие отклики сверху (таблица). Канбан сортирует по rank сам */
 function sortVacancies(list: readonly Vacancy[]): Vacancy[] {
   return [...list].sort(
     (a, b) => b.appliedAt.localeCompare(a.appliedAt) || b.createdAt.localeCompare(a.createdAt),
@@ -22,6 +25,7 @@ function cacheOps(queryClient: QueryClient, userId: string) {
   };
   return {
     key,
+    update,
     find: (id: string) => queryClient.getQueryData<Vacancy[]>(key)?.find((vacancy) => vacancy.id === id),
     upsert: (vacancy: Vacancy) => {
       update((list) => sortVacancies([vacancy, ...list.filter((item) => item.id !== vacancy.id)]));
@@ -39,6 +43,12 @@ interface Rollback {
   previous: Vacancy | undefined;
 }
 
+interface MoveVariables {
+  id: string;
+  status: VacancyStatus;
+  afterId: string | null;
+}
+
 export function useVacancies(userId: string) {
   const queryClient = useQueryClient();
   const cache = cacheOps(queryClient, userId);
@@ -47,6 +57,14 @@ export function useVacancies(userId: string) {
     queryKey: cache.key,
     queryFn: async (): Promise<Vacancy[]> => call(api.vacancies.$get()),
   });
+
+  /** Оптимистично применяет перемещение и запоминает прежнее состояние карточки для отката */
+  const optimisticMove = async ({ id, status, afterId }: MoveVariables): Promise<Rollback> => {
+    await queryClient.cancelQueries({ queryKey: cache.key });
+    const previous = cache.find(id);
+    cache.update((list) => applyMove(list, id, status, afterId));
+    return { previous };
+  };
 
   // Создание и редактирование ждут ответа сервера: форма остаётся открытой,
   // пока данные не сохранены, — так ошибка не потеряет введённое
@@ -72,17 +90,13 @@ export function useVacancies(userId: string) {
     },
   });
 
-  // Смена статуса и удаление — оптимистичные: интерфейс меняется сразу,
+  // Смена статуса, перетаскивание и удаление — оптимистичные: интерфейс меняется сразу,
   // а при ошибке сервера изменение откатывается и появляется уведомление с кнопкой «Повторить»
   const changeStatus = useMutation<Vacancy, Error, { id: string; status: VacancyStatus }, Rollback>({
     mutationFn: async ({ id, status }) =>
       call(api.vacancies[':id'].status.$patch({ param: { id }, json: { status } })),
-    onMutate: async ({ id, status }) => {
-      await queryClient.cancelQueries({ queryKey: cache.key });
-      const previous = cache.find(id);
-      if (previous) cache.upsert(withStatus(previous, status));
-      return { previous };
-    },
+    // Сервер ставит карточку наверх новой колонки — делаем так же
+    onMutate: async ({ id, status }) => optimisticMove({ id, status, afterId: null }),
     onSuccess: (vacancy) => {
       cache.upsert(vacancy);
     },
@@ -98,6 +112,41 @@ export function useVacancies(userId: string) {
           },
         },
       });
+    },
+  });
+
+  const move = useMutation<Vacancy, Error, MoveVariables, Rollback>({
+    mutationKey: moveKey(userId),
+    mutationFn: async ({ id, status, afterId }) =>
+      call(api.vacancies[':id'].move.$patch({ param: { id }, json: { status, afterId } })),
+    onMutate: optimisticMove,
+    onSuccess: (vacancy) => {
+      cache.upsert(vacancy);
+    },
+    onError: (error, variables, context) => {
+      if (context?.previous) cache.upsert(context.previous);
+      if (error instanceof ApiError && error.status === 409) {
+        // Соседняя карточка изменилась на другом устройстве: повтор не поможет, просто показываем свежий порядок
+        toast.info('Порядок карточек изменился', { description: describeError(error) });
+        return;
+      }
+      toast.error('Карточка не перемещена', {
+        description: describeError(error),
+        duration: RETRY_TOAST_MS,
+        action: {
+          label: 'Повторить',
+          onClick: () => {
+            move.mutate(variables);
+          },
+        },
+      });
+    },
+    onSettled: () => {
+      // Сервер мог перенумеровать колонку — перечитываем список, но только после последнего
+      // перемещения из серии: иначе ответ «устарел бы» и карточки прыгнули бы назад
+      if (queryClient.isMutating({ mutationKey: moveKey(userId) }) === 1) {
+        void queryClient.invalidateQueries({ queryKey: cache.key });
+      }
     },
   });
 
@@ -135,6 +184,9 @@ export function useVacancies(userId: string) {
     update,
     changeStatus: (id: string, status: VacancyStatus) => {
       if (cache.find(id)?.status !== status) changeStatus.mutate({ id, status });
+    },
+    move: (id: string, status: VacancyStatus, afterId: string | null) => {
+      move.mutate({ id, status, afterId });
     },
     remove: (id: string) => {
       remove.mutate(id);

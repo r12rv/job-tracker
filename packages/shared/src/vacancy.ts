@@ -52,6 +52,16 @@ export type VacancyInput = z.infer<typeof vacancyInputSchema>;
 
 /** Тело запроса на смену статуса */
 export const vacancyStatusUpdateSchema = z.object({ status: vacancyStatusSchema });
+
+/**
+ * Перетаскивание в канбане: в какую колонку и после какой карточки поставить.
+ * afterId: null — в начало колонки. Сервер сам вычисляет ранг, клиенту не нужно знать чужие ранги.
+ */
+export const vacancyMoveSchema = z.object({
+  status: vacancyStatusSchema,
+  afterId: z.uuid().nullable(),
+});
+export type VacancyMove = z.infer<typeof vacancyMoveSchema>;
 export type VacancyStatusUpdate = z.infer<typeof vacancyStatusUpdateSchema>;
 
 /**
@@ -72,6 +82,8 @@ export const vacancySchema = z.object({
   notes: z.string().optional(),
   status: vacancyStatusSchema,
   statusHistory: z.array(statusChangeSchema),
+  /** Порядок внутри колонки канбана: меньше — выше (см. rank.ts) */
+  rank: z.number(),
   createdAt: z.string(),
   updatedAt: z.string(),
 });
