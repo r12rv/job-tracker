@@ -40,8 +40,9 @@ export function LandingPage() {
       <Header />
 
       <main className="flex-1">
-        <section className="mx-auto max-w-3xl px-4 pt-12 pb-10 text-center sm:px-6 sm:pt-20 sm:pb-14">
-          <p className="inline-flex rounded-full bg-indigo-50 px-3 py-1 text-xs font-medium text-indigo-700 ring-1 ring-indigo-600/15 ring-inset">
+        {/* Первый экран и демо занимают всю высоту окна под шапкой (h-14 / sm:h-16 плюс 1px нижней границы) */}
+        <section className="mx-auto flex min-h-[calc(100dvh-3.5rem-1px)] max-w-3xl flex-col justify-center px-4 py-12 text-center sm:min-h-[calc(100dvh-4rem-1px)] sm:px-6">
+          <p className="inline-flex self-center rounded-full bg-indigo-50 px-3 py-1 text-xs font-medium text-indigo-700 ring-1 ring-indigo-600/15 ring-inset">
             Для тех, кто ищет работу
           </p>
           <h2 className="mt-4 text-3xl font-semibold tracking-tight text-balance text-slate-900 sm:text-5xl">
@@ -63,7 +64,10 @@ export function LandingPage() {
           <p className="mt-3 text-sm text-slate-500">Бесплатно. Нужен только аккаунт Google.</p>
         </section>
 
-        <section id="demo" className="mx-auto max-w-7xl scroll-mt-20 px-4 pb-16 sm:px-6 sm:pb-24">
+        <section
+          id="demo"
+          className="mx-auto flex min-h-[calc(100dvh-3.5rem-1px)] max-w-7xl scroll-mt-[57px] flex-col justify-center px-4 py-8 sm:min-h-[calc(100dvh-4rem-1px)] sm:scroll-mt-[65px] sm:px-6"
+        >
           <div className="mb-5 text-center">
             <h2 className="text-xl font-semibold text-slate-900 sm:text-2xl">Попробуйте прямо здесь</h2>
             <p className="mt-1.5 text-sm text-slate-600 sm:text-base">
