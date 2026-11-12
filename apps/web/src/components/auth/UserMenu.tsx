@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { authClient, signInWithGoogle } from '../../lib/auth-client';
+import { queryClient } from '../../lib/query-client';
 import { Button } from '../ui/Button';
 import { GoogleIcon } from '../ui/Icons';
 
@@ -109,6 +110,8 @@ export function UserMenu() {
             onClick={() => {
               setBusy(true);
               void authClient.signOut().finally(() => {
+                // Данные аккаунта не должны оставаться в памяти вкладки после выхода
+                queryClient.clear();
                 setBusy(false);
                 setOpen(false);
               });

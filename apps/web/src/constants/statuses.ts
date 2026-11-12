@@ -38,5 +38,3 @@ export const STATUS_META: Record<VacancyStatus, StatusMeta> = {
 
 /** Статусы, которые означают, что кандидат дошёл до собеседования */
 export const INTERVIEW_OR_LATER: readonly VacancyStatus[] = ['interview', 'offer'];
-
-export const STORAGE_KEY = 'job-tracker:v1';

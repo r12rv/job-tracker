@@ -1,6 +1,6 @@
 import { STATUS_META } from '../../constants/statuses';
 import { VACANCY_STATUSES, type VacancyStatus } from '../../types/vacancy';
-import { isVacancyStatus } from '../../utils/storage';
+import { isVacancyStatus } from '@job-tracker/shared';
 
 interface StatusSelectProps {
   value: VacancyStatus;

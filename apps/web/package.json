@@ -11,11 +11,15 @@
   },
   "dependencies": {
     "@job-tracker/shared": "*",
+    "@tanstack/react-query": "^5.107.1",
     "better-auth": "^1.7.20",
+    "hono": "^4.13.18",
     "react": "^19.3.1",
-    "react-dom": "^19.3.1"
+    "react-dom": "^19.3.1",
+    "sonner": "^2.0.8"
   },
   "devDependencies": {
+    "@job-tracker/api": "*",
     "@tailwindcss/vite": "^4.3.5",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
