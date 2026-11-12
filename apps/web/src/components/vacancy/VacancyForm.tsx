@@ -8,7 +8,7 @@ import {
   type VacancyInput,
 } from '../../types/vacancy';
 import { currencySign, todayIso } from '../../utils/format';
-import { isCurrency, isVacancyStatus } from '../../utils/storage';
+import { isCurrency, isVacancyStatus } from '@job-tracker/shared';
 import { validateVacancyForm, type FormErrors } from '../../utils/validation';
 import { SelectField, TextAreaField, TextField } from '../ui/Field';
 

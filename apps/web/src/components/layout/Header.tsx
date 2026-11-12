@@ -3,7 +3,8 @@ import { Button } from '../ui/Button';
 import { BriefcaseIcon, PlusIcon } from '../ui/Icons';
 
 interface HeaderProps {
-  onAdd: () => void;
+  /** Без обработчика кнопка «Добавить» не показывается (гость, загрузка) */
+  onAdd?: (() => void) | undefined;
 }
 
 export function Header({ onAdd }: HeaderProps) {
@@ -17,10 +18,12 @@ export function Header({ onAdd }: HeaderProps) {
           <h1 className="text-base font-semibold whitespace-nowrap text-slate-900 sm:text-lg">Трекер откликов</h1>
         </div>
         <div className="flex items-center gap-2 sm:gap-3">
-          <Button onClick={onAdd} aria-label="Добавить вакансию" className="px-2.5 sm:px-4">
-            <PlusIcon />
-            <span className="hidden sm:inline">Добавить вакансию</span>
-          </Button>
+          {onAdd && (
+            <Button onClick={onAdd} aria-label="Добавить вакансию" className="px-2.5 sm:px-4">
+              <PlusIcon />
+              <span className="hidden sm:inline">Добавить вакансию</span>
+            </Button>
+          )}
           <UserMenu />
         </div>
       </div>

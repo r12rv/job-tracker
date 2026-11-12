@@ -4,7 +4,7 @@
 
 **Демо:** https://job-tracker-olive-one.vercel.app
 
-React + TypeScript + Vite + Tailwind CSS. Данные хранятся в `localStorage` браузера.
+React + TypeScript + Vite + Tailwind CSS на фронтенде, Hono + Drizzle + Postgres на бэкенде. Вход через Google; вакансии хранятся в аккаунте и доступны с любого устройства.
 
 ## Процесс разработки
 
@@ -99,14 +99,17 @@ packages/shared  — общие Zod-схемы и типы
 ```
 
 - `packages/shared` — единый источник правды о данных: из схем выводятся типы TypeScript,
-  а строгая схема ввода (`vacancyInputSchema`) проверяет форму на фронтенде и будет проверять запросы в API.
+  а строгая схема ввода (`vacancyInputSchema`) проверяет и форму на фронтенде, и запросы в API.
 - `apps/web/src`:
   - `types` — UI-типы (форма, фильтры, статистика) и реэкспорт доменных типов
-  - `constants` — статусы, их подписи и цвета, ключ хранилища
-  - `hooks` — `useLocalStorage`, `useVacancies` (CRUD), `useFilteredVacancies`, `useStats`
-  - `utils` — форматирование, валидация формы через общую схему, разбор данных из хранилища
+  - `api/client.ts` — типизированный клиент API (Hono RPC): пути, тела запросов и ответы выводятся из типов сервера
+  - `pages` — экран входа и трекер; `App.tsx` выбирает экран по сессии (загрузка, нет связи, гость, вошёл)
+  - `constants` — статусы, их подписи и цвета
+  - `hooks` — `useVacancies` (данные через TanStack Query: оптимистичные смена статуса и удаление
+    с откатом и уведомлением «Повторить»), `useFilteredVacancies`, `useStats`, `useLocalStorage` (выбранный вид)
+  - `utils` — форматирование, валидация формы через общую схему
   - `components` — UI по разделам: `auth`, `kanban`, `table`, `stats`, `filters`, `vacancy`, `ui`, `layout`
-  - `lib/auth-client.ts` — клиент Better Auth (вход через Google, сессия, выход)
+  - `lib` — клиент Better Auth (вход через Google, сессия, выход) и общий `QueryClient`
 - `apps/api`:
   - `src/app.ts` — приложение Hono без привязки к рантайму (зависимости передаются снаружи);
     `index.ts` запускает его на Node, `vercel.ts` — точка входа серверной функции
