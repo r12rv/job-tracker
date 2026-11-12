@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient, type QueryClient } from '@tansta
 import { toast } from 'sonner';
 import { api, call, describeError } from '../api/client';
 import type { Vacancy, VacancyInput, VacancyStatus } from '../types/vacancy';
+import { withStatus } from '../utils/vacancy';
 
 /** Ключ кэша включает id пользователя: после смены аккаунта чужие данные не покажутся даже на миг */
 export const vacanciesKey = (userId: string) => ['vacancies', userId] as const;
@@ -11,16 +12,6 @@ function sortVacancies(list: readonly Vacancy[]): Vacancy[] {
   return [...list].sort(
     (a, b) => b.appliedAt.localeCompare(a.appliedAt) || b.createdAt.localeCompare(a.createdAt),
   );
-}
-
-function withStatus(vacancy: Vacancy, status: VacancyStatus): Vacancy {
-  const now = new Date().toISOString();
-  return {
-    ...vacancy,
-    status,
-    statusHistory: [...vacancy.statusHistory, { status, changedAt: now }],
-    updatedAt: now,
-  };
 }
 
 /** Точечные правки кэша: при параллельных изменениях откат одного не затирает другие */

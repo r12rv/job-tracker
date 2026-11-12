@@ -1,25 +1,16 @@
-import { useMemo, useState } from 'react';
-import { FiltersBar } from '../components/filters/FiltersBar';
-import { KanbanBoard } from '../components/kanban/KanbanBoard';
+import { useState } from 'react';
 import { EmptyState } from '../components/layout/EmptyState';
 import { Header } from '../components/layout/Header';
-import { StatsPanel } from '../components/stats/StatsPanel';
-import { VacancyTable } from '../components/table/VacancyTable';
+import { TrackerBoard } from '../components/tracker/TrackerBoard';
 import { Button } from '../components/ui/Button';
 import { ConfirmDialog } from '../components/ui/ConfirmDialog';
 import { PlusIcon } from '../components/ui/Icons';
 import { VacancyModal } from '../components/vacancy/VacancyModal';
-import { ViewTabs } from '../components/views/ViewTabs';
-import { useFilteredVacancies } from '../hooks/useFilteredVacancies';
 import { useLocalStorage } from '../hooks/useLocalStorage';
-import { useStats } from '../hooks/useStats';
 import { useVacancies } from '../hooks/useVacancies';
-import type { Vacancy, VacancyFilters, VacancyInput, VacancyStatus, ViewMode } from '../types/vacancy';
+import type { Vacancy, VacancyInput, ViewMode } from '../types/vacancy';
 
 type EditorState = { mode: 'closed' } | { mode: 'create' } | { mode: 'edit'; vacancy: Vacancy };
-
-const INITIAL_FILTERS: VacancyFilters = { status: 'all', search: '' };
-const NO_VACANCIES: Vacancy[] = [];
 
 function parseViewMode(raw: unknown): ViewMode {
   return raw === 'table' ? 'table' : 'kanban';
@@ -45,25 +36,11 @@ interface TrackerPageProps {
 }
 
 export function TrackerPage({ userId }: TrackerPageProps) {
-  const { vacancies: loaded, isLoading, loadError, refetch, create, update, changeStatus, remove } =
-    useVacancies(userId);
-  const vacancies = loaded ?? NO_VACANCIES;
+  const { vacancies, isLoading, loadError, refetch, create, update, changeStatus, remove } = useVacancies(userId);
 
   const [view, setView] = useLocalStorage<ViewMode>('job-tracker:view', 'kanban', parseViewMode);
-  const [filters, setFilters] = useState<VacancyFilters>(INITIAL_FILTERS);
   const [editor, setEditor] = useState<EditorState>({ mode: 'closed' });
   const [pendingDelete, setPendingDelete] = useState<Vacancy | null>(null);
-
-  const stats = useStats(vacancies);
-  const filtered = useFilteredVacancies(vacancies, filters);
-
-  // Счётчики на чипах учитывают поиск, но не выбранный статус
-  const searchMatched = useFilteredVacancies(vacancies, { status: 'all', search: filters.search });
-  const statusCounts = useMemo(() => {
-    const counts: Record<VacancyStatus, number> = { applied: 0, test: 0, interview: 0, offer: 0, rejected: 0 };
-    for (const vacancy of searchMatched) counts[vacancy.status] += 1;
-    return counts;
-  }, [searchMatched]);
 
   const openCreate = () => { setEditor({ mode: 'create' }); };
   const openEdit = (vacancy: Vacancy) => { setEditor({ mode: 'edit', vacancy }); };
@@ -81,18 +58,16 @@ export function TrackerPage({ userId }: TrackerPageProps) {
     setPendingDelete(null);
   };
 
-  const hasAny = vacancies.length > 0;
-  const nothingFound = hasAny && filtered.length === 0;
-  const showKanbanAnyway = view === 'kanban' && filters.search === '';
-
   const renderContent = () => {
     if (isLoading) return <TrackerSkeleton />;
 
-    if (loadError && !loaded) {
+    if (!vacancies) {
       return (
         <EmptyState
           title="Не удалось загрузить вакансии"
-          description="Проверьте подключение к интернету и попробуйте ещё раз."
+          description={
+            loadError ? 'Проверьте подключение к интернету и попробуйте ещё раз.' : 'Попробуйте обновить страницу.'
+          }
           action={
             <Button variant="secondary" onClick={() => { void refetch(); }}>
               Повторить
@@ -103,54 +78,14 @@ export function TrackerPage({ userId }: TrackerPageProps) {
     }
 
     return (
-      <>
-        <StatsPanel stats={stats} />
-
-        {hasAny ? (
-          <>
-            <div className="flex flex-col gap-3">
-              <div className="flex items-center justify-between gap-3">
-                <ViewTabs value={view} onChange={setView} />
-                <p className="text-sm text-slate-500 tabular-nums">
-                  {filtered.length} из {vacancies.length}
-                </p>
-              </div>
-              <FiltersBar
-                filters={filters}
-                counts={statusCounts}
-                total={searchMatched.length}
-                onChange={setFilters}
-              />
-            </div>
-
-            {nothingFound && !showKanbanAnyway ? (
-              <EmptyState
-                title="Ничего не найдено"
-                description="Попробуйте изменить поисковый запрос или выбрать другой статус."
-                action={
-                  <Button variant="secondary" onClick={() => { setFilters(INITIAL_FILTERS); }}>
-                    Сбросить фильтры
-                  </Button>
-                }
-              />
-            ) : view === 'kanban' ? (
-              <KanbanBoard
-                vacancies={filtered}
-                statusFilter={filters.status}
-                onStatusChange={changeStatus}
-                onEdit={openEdit}
-                onDelete={setPendingDelete}
-              />
-            ) : (
-              <VacancyTable
-                vacancies={filtered}
-                onStatusChange={changeStatus}
-                onEdit={openEdit}
-                onDelete={setPendingDelete}
-              />
-            )}
-          </>
-        ) : (
+      <TrackerBoard
+        vacancies={vacancies}
+        view={view}
+        onViewChange={setView}
+        onStatusChange={changeStatus}
+        onEdit={openEdit}
+        onDelete={setPendingDelete}
+        emptyState={
           <EmptyState
             title="Пока нет откликов"
             description="Добавьте первую вакансию, на которую откликнулись, — и следите за её движением по воронке."
@@ -161,8 +96,8 @@ export function TrackerPage({ userId }: TrackerPageProps) {
               </Button>
             }
           />
-        )}
-      </>
+        }
+      />
     );
   };
 

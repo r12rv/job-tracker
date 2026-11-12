@@ -2,7 +2,7 @@ import { EmptyState } from './components/layout/EmptyState';
 import { Header } from './components/layout/Header';
 import { Button } from './components/ui/Button';
 import { authClient } from './lib/auth-client';
-import { SignInPage } from './pages/SignInPage';
+import { LandingPage } from './pages/LandingPage';
 import { TrackerPage } from './pages/TrackerPage';
 
 export default function App() {
@@ -44,7 +44,7 @@ export default function App() {
       );
     }
 
-    return <SignInPage />;
+    return <LandingPage />;
   };
 
   return (
