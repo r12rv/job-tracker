@@ -4,7 +4,7 @@
     {
       "name": "dev",
       "runtimeExecutable": "zsh",
-      "runtimeArgs": ["-c", "source \"${NVM_DIR:-$HOME/.nvm}/nvm.sh\" && nvm use >/dev/null && npm run dev -w @job-tracker/web -- --port 5173 --strictPort"],
+      "runtimeArgs": ["-c", "source \"${NVM_DIR:-$HOME/.nvm}/nvm.sh\" && nvm use >/dev/null && npm run dev -w @job-tracker/web"],
       "port": 5173
     },
     {
