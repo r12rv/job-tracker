@@ -3,7 +3,7 @@ import { toast } from 'sonner';
 import { createDemoVacancies } from '../../demo/demoVacancies';
 import { signInWithGoogle } from '../../lib/auth-client';
 import type { Vacancy, VacancyStatus, ViewMode } from '../../types/vacancy';
-import { withStatus } from '../../utils/vacancy';
+import { applyMove } from '../../utils/vacancy';
 import { EmptyState } from '../layout/EmptyState';
 import { TrackerBoard } from '../tracker/TrackerBoard';
 import { Button } from '../ui/Button';
@@ -31,10 +31,15 @@ export function LiveDemo() {
     setResetKey((key) => key + 1);
   };
 
+  // Та же логика, что у настоящего трекера: смена статуса ставит карточку наверх новой колонки
   const changeStatus = (id: string, status: VacancyStatus) => {
     setVacancies((list) =>
-      list.map((vacancy) => (vacancy.id === id && vacancy.status !== status ? withStatus(vacancy, status) : vacancy)),
+      list.find((vacancy) => vacancy.id === id)?.status === status ? list : applyMove(list, id, status, null),
     );
+  };
+
+  const move = (id: string, status: VacancyStatus, afterId: string | null) => {
+    setVacancies((list) => applyMove(list, id, status, afterId));
   };
 
   const remove = (vacancy: Vacancy) => {
@@ -84,6 +89,7 @@ export function LiveDemo() {
           view={view}
           onViewChange={setView}
           onStatusChange={changeStatus}
+          onMove={move}
           onEdit={edit}
           onDelete={remove}
           emptyState={

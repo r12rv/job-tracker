@@ -58,6 +58,7 @@ describe('авторизация', () => {
       ['GET', `/api/vacancies/${id}`],
       ['PUT', `/api/vacancies/${id}`],
       ['PATCH', `/api/vacancies/${id}/status`],
+      ['PATCH', `/api/vacancies/${id}/move`],
       ['DELETE', `/api/vacancies/${id}`],
     ] as const) {
       const body = method === 'GET' || method === 'DELETE' ? undefined : vacancyInput();

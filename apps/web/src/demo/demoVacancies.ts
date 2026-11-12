@@ -89,9 +89,13 @@ export function createDemoVacancies(now = Date.now()): Vacancy[] {
       appliedAt: first.changedAt.slice(0, 10),
       status: last.status,
       statusHistory,
+      rank: 0, // проставляется ниже, после сортировки
       ...(seed.notes === undefined ? {} : { notes: seed.notes }),
       createdAt: first.changedAt,
       updatedAt: last.changedAt,
     };
-  }).sort((a, b) => b.appliedAt.localeCompare(a.appliedAt));
+  })
+    .sort((a, b) => b.appliedAt.localeCompare(a.appliedAt))
+    // Как у новых пользователей после миграции: в каждой колонке свежие отклики сверху
+    .map((vacancy, index) => ({ ...vacancy, rank: index }));
 }

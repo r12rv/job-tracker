@@ -9,13 +9,19 @@ interface VacancyCardProps {
   onStatusChange: (id: string, status: VacancyStatus) => void;
   onEdit: (vacancy: Vacancy) => void;
   onDelete: (vacancy: Vacancy) => void;
+  /** Карточка «в руке» во время перетаскивания: приподнята и слегка повёрнута */
+  lifted?: boolean;
 }
 
-export function VacancyCard({ vacancy, onStatusChange, onEdit, onDelete }: VacancyCardProps) {
+export function VacancyCard({ vacancy, onStatusChange, onEdit, onDelete, lifted = false }: VacancyCardProps) {
   const hasSalary = vacancy.salary.min !== undefined || vacancy.salary.max !== undefined;
 
   return (
-    <article className="group rounded-xl bg-white p-3.5 shadow-sm ring-1 ring-slate-200 transition-shadow hover:shadow-md">
+    <article
+      className={`group rounded-xl bg-white p-3.5 ring-1 transition-shadow ${
+        lifted ? 'rotate-2 cursor-grabbing shadow-xl ring-indigo-300' : 'shadow-sm ring-slate-200 hover:shadow-md'
+      }`}
+    >
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
           <h3 className="truncate font-semibold text-slate-900" title={vacancy.company}>

@@ -1,4 +1,4 @@
-import { vacancyInputSchema, vacancyStatusUpdateSchema } from '@job-tracker/shared';
+import { vacancyInputSchema, vacancyMoveSchema, vacancyStatusUpdateSchema } from '@job-tracker/shared';
 import { zValidator } from '@hono/zod-validator';
 import { Hono, type ValidationTargets } from 'hono';
 import type { AuthedEnv } from '../app';
@@ -54,6 +54,13 @@ export function createVacancyRoutes(repository: VacancyRepository) {
     .patch('/:id/status', validate('param', idParamSchema), validate('json', vacancyStatusUpdateSchema), async (c) => {
       const vacancy = await repository.setStatus(c.get('userId'), c.req.valid('param').id, c.req.valid('json').status);
       return vacancy ? c.json(vacancy) : c.json(notFound, 404);
+    })
+
+    // Перетаскивание в канбане: колонка и место в ней. 409 — соседняя карточка изменилась, клиент перечитает список
+    .patch('/:id/move', validate('param', idParamSchema), validate('json', vacancyMoveSchema), async (c) => {
+      const result = await repository.move(c.get('userId'), c.req.valid('param').id, c.req.valid('json'));
+      if (result.ok) return c.json(result.vacancy);
+      return result.reason === 'conflict' ? c.json({ error: 'conflict' } as const, 409) : c.json(notFound, 404);
     })
 
     .delete('/:id', validate('param', idParamSchema), async (c) => {
