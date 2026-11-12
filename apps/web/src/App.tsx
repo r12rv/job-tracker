@@ -126,6 +126,12 @@ export default function App() {
         )}
       </main>
 
+      <footer className="mx-auto flex max-w-7xl justify-center px-4 pb-6 text-xs text-slate-400 sm:px-6">
+        <a href="/privacy.html" className="hover:text-slate-600 hover:underline">
+          Политика конфиденциальности
+        </a>
+      </footer>
+
       <VacancyModal
         open={editor.mode !== 'closed'}
         vacancy={editor.mode === 'edit' ? editor.vacancy : undefined}

@@ -1,12 +1,13 @@
 import { serve } from '@hono/node-server';
 import { createApp } from './app';
+import { authConfigFromEnv, createAuth } from './auth';
 import { createDb } from './db/client';
 import { loadLocalEnv, readEnv } from './env';
 
 loadLocalEnv();
 const env = readEnv();
 const { db, close } = createDb(env.DATABASE_URL);
-const app = createApp({ db, enableVacancies: env.ENABLE_VACANCIES_API });
+const app = createApp({ db, auth: createAuth(db, authConfigFromEnv(env)) });
 
 const server = serve({ fetch: app.fetch, port: env.PORT }, (info) => {
   console.log(`API: http://localhost:${info.port}/api/health`);

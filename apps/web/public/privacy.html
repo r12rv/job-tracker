@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Политика конфиденциальности — Трекер откликов</title>
+    <meta name="description" content="Какие данные собирает Трекер откликов и как они используются." />
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #f8fafc;
+        --card: #ffffff;
+        --text: #0f172a;
+        --muted: #475569;
+        --border: #e2e8f0;
+        --accent: #4f46e5;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0b1120;
+          --card: #111827;
+          --text: #e2e8f0;
+          --muted: #94a3b8;
+          --border: #1f2937;
+          --accent: #818cf8;
+        }
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font: 16px/1.65 ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      main {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 32px 16px 64px;
+      }
+      article {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 24px;
+      }
+      h1 { font-size: 1.6rem; line-height: 1.25; margin: 0 0 4px; }
+      h2 { font-size: 1.1rem; margin: 28px 0 8px; }
+      p, li { color: var(--muted); }
+      p { margin: 0 0 12px; }
+      ul { margin: 0 0 12px; padding-left: 1.25rem; }
+      a { color: var(--accent); }
+      .updated { font-size: 0.9rem; margin-bottom: 20px; }
+      .back { display: inline-block; margin-bottom: 16px; font-size: 0.95rem; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <a class="back" href="/">← Трекер откликов</a>
+      <article>
+        <h1>Политика конфиденциальности</h1>
+        <p class="updated">Обновлено 11 ноября 2026 г.</p>
+
+        <p>
+          «Трекер откликов» — некоммерческий проект для портфолио: сервис, где можно вести список вакансий,
+          на которые вы откликнулись. Ниже — какие данные он использует и зачем.
+        </p>
+
+        <h2>Какие данные мы получаем</h2>
+        <ul>
+          <li>
+            <strong>При входе через Google</strong> — ваше имя, адрес электронной почты и ссылку на аватар.
+            Пароль от Google сервису недоступен.
+          </li>
+          <li>
+            <strong>Данные, которые вы вводите сами</strong> — компании, должности, ссылки на вакансии,
+            зарплатные вилки, даты, заметки и статусы откликов.
+          </li>
+          <li>
+            <strong>Технические данные сессии</strong> — IP-адрес и тип браузера сохраняются вместе с сессией входа,
+            чтобы вы могли видеть и защищать свой аккаунт.
+          </li>
+        </ul>
+
+        <h2>Как данные используются</h2>
+        <p>
+          Только для работы сервиса: чтобы узнать вас при входе и показать ваши вакансии. Данные не продаются,
+          не передаются третьим лицам для рекламы и не используются для аналитики или обучения моделей.
+        </p>
+        <p>
+          Использование информации, полученной через API Google, соответствует
+          <a href="https://developers.google.com/terms/api-services-user-data-policy" rel="noopener">
+            Google API Services User Data Policy</a>, включая требования Limited Use.
+        </p>
+
+        <h2>Где хранятся данные</h2>
+        <p>
+          Сайт и сервер размещены на <a href="https://vercel.com" rel="noopener">Vercel</a>, база данных —
+          в <a href="https://neon.tech" rel="noopener">Neon</a> (PostgreSQL), серверы в США. Вакансии, добавленные
+          без входа, хранятся только в вашем браузере и на сервер не отправляются.
+        </p>
+
+        <h2>Cookie</h2>
+        <p>
+          Используется только cookie сессии входа — без неё сервис не узнает вас при следующем визите.
+          Рекламных и аналитических cookie нет.
+        </p>
+
+        <h2>Удаление данных</h2>
+        <p>
+          Вы можете выйти из аккаунта в любой момент. Чтобы удалить аккаунт и все связанные с ним данные,
+          создайте запрос в
+          <a href="https://github.com/r12rv/job-tracker/issues" rel="noopener">репозитории проекта на GitHub</a>.
+          При удалении аккаунта удаляются и все ваши вакансии. Также можно отозвать доступ сервиса в
+          <a href="https://myaccount.google.com/permissions" rel="noopener">настройках аккаунта Google</a>.
+        </p>
+
+        <h2>Изменения</h2>
+        <p>
+          Если политика изменится, новая версия появится на этой странице с обновлённой датой.
+          Вопросы — через <a href="https://github.com/r12rv/job-tracker/issues" rel="noopener">GitHub</a>.
+        </p>
+      </article>
+    </main>
+  </body>
+</html>
