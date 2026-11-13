@@ -1,0 +1,20 @@
+{
+  "name": "@job-tracker/e2e",
+  "private": true,
+  "version": "0.2.0",
+  "type": "module",
+  "scripts": {
+    "e2e": "playwright test",
+    "e2e:ui": "playwright test --ui",
+    "e2e:report": "playwright show-report",
+    "typecheck": "tsc --noEmit -p ."
+  },
+  "dependencies": {
+    "@job-tracker/api": "*",
+    "@job-tracker/shared": "*"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@playwright/test": "^1.65.0"
+  }
+}

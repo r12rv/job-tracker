@@ -5,7 +5,8 @@
   "type": "module",
   "workspaces": [
     "apps/*",
-    "packages/*"
+    "packages/*",
+    "e2e"
   ],
   "scripts": {
     "dev": "npm run dev -w @job-tracker/web",
@@ -20,7 +21,9 @@
     "db:generate": "npm run db:generate -w @job-tracker/api",
     "db:migrate": "npm run db:migrate -w @job-tracker/api",
     "db:studio": "npm run db:studio -w @job-tracker/api",
-    "build:vercel": "tsx scripts/build-vercel.ts"
+    "build:vercel": "tsx scripts/build-vercel.ts",
+    "e2e": "npm run e2e -w @job-tracker/e2e",
+    "e2e:ui": "npm run e2e:ui -w @job-tracker/e2e"
   },
   "engines": {
     "node": ">=22.12.0"
