@@ -66,7 +66,7 @@ export function VacancyTable({ vacancies, onStatusChange, onEdit, onDelete }: Va
                 <td className="max-w-64 px-4 py-3 text-sm text-slate-700">
                   <div className="truncate" title={vacancy.position}>{vacancy.position}</div>
                   {vacancy.notes && (
-                    <div className="mt-0.5 truncate text-xs text-slate-400" title={vacancy.notes}>
+                    <div className="mt-0.5 truncate text-xs text-slate-500" title={vacancy.notes}>
                       {vacancy.notes}
                     </div>
                   )}
@@ -78,7 +78,11 @@ export function VacancyTable({ vacancies, onStatusChange, onEdit, onDelete }: Va
                   <time dateTime={vacancy.appliedAt}>{formatDate(vacancy.appliedAt)}</time>
                 </td>
                 <td className="px-4 py-3">
-                  <StatusSelect value={vacancy.status} onChange={(status) => { onStatusChange(vacancy.id, status); }} />
+                  <StatusSelect
+          value={vacancy.status}
+          label={`Статус: ${vacancy.company}`}
+          onChange={(status) => { onStatusChange(vacancy.id, status); }}
+        />
                 </td>
                 <td className="px-2 py-1.5 text-right">
                   <div className="inline-flex">

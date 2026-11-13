@@ -6,7 +6,7 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default defineConfig([
-  globalIgnores(['**/dist', '**/node_modules', '.vercel']),
+  globalIgnores(['**/dist', '**/node_modules', '.vercel', 'e2e/test-results', 'e2e/playwright-report']),
 
   // Общие правила для всего TypeScript-кода монорепозитория
   {
@@ -44,9 +44,9 @@ export default defineConfig([
     languageOptions: { globals: globals.browser },
   },
 
-  // API: Node.js
+  // API и e2e-тесты: Node.js
   {
-    files: ['apps/api/**/*.ts'],
+    files: ['apps/api/**/*.ts', 'e2e/**/*.ts'],
     languageOptions: { globals: globals.node },
   },
 

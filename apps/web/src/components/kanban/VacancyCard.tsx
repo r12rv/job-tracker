@@ -49,7 +49,11 @@ export function VacancyCard({ vacancy, onStatusChange, onEdit, onDelete, lifted 
       )}
 
       <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
-        <StatusSelect value={vacancy.status} onChange={(status) => { onStatusChange(vacancy.id, status); }} />
+        <StatusSelect
+          value={vacancy.status}
+          label={`Статус: ${vacancy.company}`}
+          onChange={(status) => { onStatusChange(vacancy.id, status); }}
+        />
         <div className="flex items-center gap-2 text-xs text-slate-500">
           {vacancy.url && (
             <a

@@ -30,7 +30,7 @@ export function FiltersBar({ filters, counts, total, onChange }: FiltersBarProps
   return (
     <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
       <div className="relative lg:w-72">
-        <SearchIcon className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400" />
+        <SearchIcon className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-500" />
         <input
           type="search"
           value={filters.search}
@@ -43,7 +43,7 @@ export function FiltersBar({ filters, counts, total, onChange }: FiltersBarProps
           <button
             type="button"
             onClick={() => { onChange({ ...filters, search: '' }); }}
-            className="absolute top-1/2 right-2 -translate-y-1/2 rounded p-1 text-slate-400 hover:text-slate-600"
+            className="absolute top-1/2 right-2 -translate-y-1/2 rounded p-1 text-slate-500 hover:text-slate-700"
             aria-label="Очистить поиск"
           >
             <XIcon className="size-4" />
@@ -73,7 +73,7 @@ export function FiltersBar({ filters, counts, total, onChange }: FiltersBarProps
             >
               {option.dot && <span className={`size-1.5 rounded-full ${option.dot}`} />}
               {option.label}
-              <span className={`tabular-nums ${active ? 'text-slate-300' : 'text-slate-400'}`}>{option.count}</span>
+              <span className={`tabular-nums ${active ? 'text-slate-300' : 'text-slate-500'}`}>{option.count}</span>
             </button>
           );
         })}

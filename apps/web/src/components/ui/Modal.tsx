@@ -61,7 +61,7 @@ export function Modal({ open, title, onClose, children, footer, size = 'lg' }: M
           <button
             type="button"
             onClick={onClose}
-            className="-mr-2 rounded-lg p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
+            className="-mr-2 rounded-lg p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-700"
             aria-label="Закрыть"
           >
             <XIcon className="size-5" />

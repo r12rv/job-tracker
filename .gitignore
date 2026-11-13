@@ -11,3 +11,8 @@ dist
 
 # Результат сборки для Vercel (Build Output API)
 .vercel
+
+# Playwright: отчёты и трейсы упавших тестов
+e2e/test-results
+e2e/playwright-report
+e2e/blob-report

@@ -21,7 +21,12 @@ function FieldShell({ id, label, error, required, children, className = '' }: Fi
     <div className={className}>
       <label htmlFor={id} className="mb-1.5 block text-sm font-medium text-slate-700">
         {label}
-        {required && <span className="ml-0.5 text-rose-500">*</span>}
+        {/* Звёздочка — только визуальная подсказка; скринридеру обязательность сообщает aria-required */}
+        {required && (
+          <span aria-hidden="true" className="ml-0.5 text-rose-500">
+            *
+          </span>
+        )}
       </label>
       {children}
       {error && (
@@ -52,6 +57,7 @@ export function TextField({
       <input
         id={id}
         aria-invalid={error ? true : undefined}
+        aria-required={required ? true : undefined}
         aria-describedby={error ? `${id}-error` : undefined}
         className={`${controlClasses(Boolean(error))} h-10`}
         {...props}

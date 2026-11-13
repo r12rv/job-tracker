@@ -74,7 +74,7 @@ export function LiveDemo() {
           <span className="size-2.5 rounded-full bg-amber-400" />
           <span className="size-2.5 rounded-full bg-emerald-400" />
         </div>
-        <span className="truncate text-xs font-medium text-slate-500">Демо · примеры вакансий, ничего не сохраняется</span>
+        <span className="truncate text-xs font-medium text-slate-600">Демо · примеры вакансий, ничего не сохраняется</span>
         <Button variant="ghost" size="sm" className="ml-auto" onClick={reset}>
           <ResetIcon className="size-3.5" />
           <span className="hidden sm:inline">Сбросить демо</span>

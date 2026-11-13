@@ -1,22 +1,22 @@
 import {
-  closestCorners,
   DndContext,
   DragOverlay,
   KeyboardSensor,
   useSensor,
   useSensors,
   type Announcements,
+  type CollisionDetection,
   type DragEndEvent,
   type DragOverEvent,
   type DragStartEvent,
   type UniqueIdentifier,
 } from '@dnd-kit/core';
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { STATUS_META } from '../../constants/statuses';
 import { VACANCY_STATUSES, type StatusFilter, type Vacancy, type VacancyStatus } from '../../types/vacancy';
 import { compareByRank } from '../../utils/vacancy';
-import { CardMouseSensor, CardTouchSensor, columnDropId } from './dnd';
+import { CardMouseSensor, CardTouchSensor, columnDropId, keyboardCollision, pointerCollision } from './dnd';
 import { KanbanColumn } from './KanbanColumn';
 import { VacancyCard } from './VacancyCard';
 
@@ -67,7 +67,16 @@ export function KanbanBoard({ vacancies, statusFilter, onStatusChange, onMove, o
 
   const visibleStatuses = statusFilter === 'all' ? VACANCY_STATUSES : [statusFilter];
 
-  const handleDragStart = ({ active: dragged }: DragStartEvent) => {
+  // Чем начали перетаскивание — от этого зависит, как искать место для карточки
+  const inputRef = useRef<'pointer' | 'keyboard'>('pointer');
+  const emptyColumnIds = new Set(
+    VACANCY_STATUSES.filter((status) => columns[status].every((id) => id === drag?.activeId)).map(columnDropId),
+  );
+  const collisionDetection: CollisionDetection = (args) =>
+    inputRef.current === 'keyboard' ? keyboardCollision(emptyColumnIds)(args) : pointerCollision(args);
+
+  const handleDragStart = ({ active: dragged, activatorEvent }: DragStartEvent) => {
+    inputRef.current = activatorEvent instanceof KeyboardEvent ? 'keyboard' : 'pointer';
     setDrag({ activeId: String(dragged.id), columns: grouped });
   };
 
@@ -101,10 +110,11 @@ export function KanbanBoard({ vacancies, statusFilter, onStatusChange, onMove, o
     const to = findColumn(state.columns, over.id);
     if (!to) return;
 
-    // Итоговый порядок колонки после отпускания
+    // Итоговый порядок колонки после отпускания. Отпустили на саму колонку (пустое место) — в конец
     const list = state.columns[to];
     const from = list.indexOf(id);
-    const overIndex = list.indexOf(String(over.id));
+    const droppedOnColumn = String(over.id) === columnDropId(to);
+    const overIndex = droppedOnColumn ? list.length - 1 : list.indexOf(String(over.id));
     const finalList = overIndex === -1 || from === -1 ? list : arrayMove(list, from, overIndex);
     const index = finalList.indexOf(id);
     const afterId = index > 0 ? (finalList[index - 1] ?? null) : null;
@@ -121,26 +131,29 @@ export function KanbanBoard({ vacancies, statusFilter, onStatusChange, onMove, o
   };
 
   const describe = (id: UniqueIdentifier) => byId.get(String(id))?.company ?? 'карточка';
-  const columnLabel = (id: UniqueIdentifier | undefined) => {
-    if (id === undefined) return '';
+  /** «место 2 из 3 в колонке „Отклик“» — куда встанет карточка, если её отпустить */
+  const placement = (id: UniqueIdentifier) => {
     const status = findColumn(columns, id);
-    return status ? STATUS_META[status].label : '';
+    if (!status) return 'вне колонок';
+    const list = columns[status];
+    const index = list.indexOf(String(id));
+    const position = index === -1 ? list.length : index + 1;
+    return `место ${position} из ${Math.max(list.length, position)} в колонке «${STATUS_META[status].label}»`;
   };
 
-  // Озвучка для скринридеров — по-русски, чтобы перетаскивание с клавиатуры было понятным
+  // Озвучка для скринридеров — по-русски и с местом в колонке: с клавиатуры понятно, куда встанет карточка
   const announcements: Announcements = {
     onDragStart: ({ active: a }) => `Взята карточка «${describe(a.id)}».`,
-    onDragOver: ({ active: a, over }) =>
-      over ? `«${describe(a.id)}» в колонке «${columnLabel(over.id)}».` : `«${describe(a.id)}» вне колонок.`,
+    onDragOver: ({ active: a, over }) => `«${describe(a.id)}»: ${over ? placement(over.id) : 'вне колонок'}.`,
     onDragEnd: ({ active: a, over }) =>
-      over ? `«${describe(a.id)}» перенесена в колонку «${columnLabel(over.id)}».` : 'Перемещение отменено.',
+      over ? `«${describe(a.id)}» перенесена: ${placement(over.id)}.` : 'Перемещение отменено.',
     onDragCancel: ({ active: a }) => `Перемещение «${describe(a.id)}» отменено.`,
   };
 
   return (
     <DndContext
       sensors={sensors}
-      collisionDetection={closestCorners}
+      collisionDetection={collisionDetection}
       onDragStart={handleDragStart}
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
