@@ -36,11 +36,18 @@ export type StatusChange = z.infer<typeof statusChangeSchema>;
  * Данные, которые пользователь вводит при создании/редактировании вакансии.
  * Строгая схема: одна и та же проверка работает в форме на фронтенде и в API.
  */
+/**
+ * Имя хоста ссылки: домен с точкой и буквенной зоной (кириллица приходит как punycode — xn--…).
+ * Нужна явная проверка: Chromium разбирает адреса мягче Node и принимает, например, «https://a b»,
+ * из-за чего форма пропускала ссылку, а сервер её отклонял.
+ */
+const HOSTNAME = /^(?:(?!-)[a-z0-9-]{1,63}(?<!-)\.)+(?:[a-z]{2,63}|xn--[a-z0-9-]{1,59})$/i;
+
 export const vacancyInputSchema = z.object({
   company: z.string().trim().min(1, 'Укажите компанию').max(200, 'Слишком длинное название'),
   position: z.string().trim().min(1, 'Укажите должность').max(200, 'Слишком длинное название'),
   url: z
-    .url({ protocol: /^https?$/, error: 'Некорректная ссылка' })
+    .url({ protocol: /^https?$/, hostname: HOSTNAME, error: 'Некорректная ссылка' })
     .max(2000, 'Слишком длинная ссылка')
     .optional(),
   salary: salaryRangeSchema,

@@ -22,6 +22,7 @@ export function KanbanColumn({ status, vacancies, onStatusChange, onEdit, onDele
 
   return (
     <section
+      ref={setNodeRef}
       aria-label={meta.label}
       className={`flex w-[85vw] max-w-80 shrink-0 snap-start flex-col rounded-2xl p-2 transition-colors sm:w-72 lg:w-auto lg:max-w-none lg:min-w-0 lg:flex-1 ${
         active ? 'bg-indigo-100/70' : 'bg-slate-100/80'
@@ -34,21 +35,25 @@ export function KanbanColumn({ status, vacancies, onStatusChange, onEdit, onDele
           {vacancies.length}
         </span>
       </header>
-      {/* Вся область списка принимает карточку — даже если колонка пустая */}
-      <div ref={setNodeRef} className="flex min-h-16 flex-1 flex-col gap-2">
+      {/* Карточку принимает вся колонка, включая отступы и пустое место внизу */}
+      <div className="flex min-h-16 flex-1 flex-col gap-2">
         <SortableContext items={vacancies.map((vacancy) => vacancy.id)} strategy={verticalListSortingStrategy}>
-          {vacancies.map((vacancy) => (
-            <SortableVacancyCard
-              key={vacancy.id}
-              vacancy={vacancy}
-              onStatusChange={onStatusChange}
-              onEdit={onEdit}
-              onDelete={onDelete}
-            />
-          ))}
+          {vacancies.length > 0 && (
+            <div role="list" aria-label={`Вакансии: ${meta.label}`} className="flex flex-col gap-2">
+              {vacancies.map((vacancy) => (
+                <SortableVacancyCard
+                  key={vacancy.id}
+                  vacancy={vacancy}
+                  onStatusChange={onStatusChange}
+                  onEdit={onEdit}
+                  onDelete={onDelete}
+                />
+              ))}
+            </div>
+          )}
         </SortableContext>
         {vacancies.length === 0 && (
-          <p className="rounded-xl border border-dashed border-slate-300 px-3 py-6 text-center text-xs text-slate-400">
+          <p className="rounded-xl border border-dashed border-slate-300 px-3 py-6 text-center text-xs text-slate-600">
             {active ? 'Отпустите здесь' : 'Пусто'}
           </p>
         )}

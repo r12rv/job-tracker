@@ -173,6 +173,17 @@ describe('POST /api/vacancies', () => {
     });
   });
 
+  it('проверяет домен ссылки одинаково строго в браузере и на сервере', async () => {
+    for (const url of ['https://a b', 'https://not-a-url', 'ftp://hh.ru/vacancy/1', 'https://-bad.com/x']) {
+      const { status } = await api('POST', '/api/vacancies', { ...vacancyInput(), url });
+      expect(status, url).toBe(400);
+    }
+    for (const url of ['https://career.habr.com/vacancies/1', 'https://яндекс.рф/jobs']) {
+      const { status } = await api('POST', '/api/vacancies', { ...vacancyInput(), url });
+      expect(status, url).toBe(201);
+    }
+  });
+
   it('отклоняет неизвестный статус', async () => {
     const { status } = await api('POST', '/api/vacancies', { ...vacancyInput(), status: 'hired' });
     expect(status).toBe(400);
