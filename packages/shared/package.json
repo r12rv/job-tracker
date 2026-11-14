@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.2.0",
   "type": "module",
+  "sideEffects": false,
   "description": "Общие схемы Zod и типы для фронтенда и API",
   "exports": {
     ".": "./src/index.ts"

@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient, type QueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { api, ApiError, call, describeError } from '../api/client';
+import { api, call } from '../api/client';
+import { ApiError, describeError } from '../api/errors';
 import type { Vacancy, VacancyInput, VacancyStatus } from '../types/vacancy';
 import { applyMove } from '../utils/vacancy';
 

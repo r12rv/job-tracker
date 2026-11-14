@@ -1,12 +1,8 @@
 import { z } from 'zod';
+import { CURRENCIES, VACANCY_STATUSES } from './constants';
 
-export const VACANCY_STATUSES = ['applied', 'test', 'interview', 'offer', 'rejected'] as const;
 export const vacancyStatusSchema = z.enum(VACANCY_STATUSES);
-export type VacancyStatus = z.infer<typeof vacancyStatusSchema>;
-
-export const CURRENCIES = ['RUB', 'USD', 'EUR'] as const;
 export const currencySchema = z.enum(CURRENCIES);
-export type Currency = z.infer<typeof currencySchema>;
 
 const amountSchema = z
   .number({ error: 'Введите число' })
@@ -95,11 +91,3 @@ export const vacancySchema = z.object({
   updatedAt: z.string(),
 });
 export type Vacancy = z.infer<typeof vacancySchema>;
-
-export function isVacancyStatus(value: unknown): value is VacancyStatus {
-  return vacancyStatusSchema.safeParse(value).success;
-}
-
-export function isCurrency(value: unknown): value is Currency {
-  return currencySchema.safeParse(value).success;
-}

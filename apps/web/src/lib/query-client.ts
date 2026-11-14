@@ -1,5 +1,5 @@
 import { MutationCache, QueryCache, QueryClient } from '@tanstack/react-query';
-import { ApiError, isUnauthorized } from '../api/client';
+import { ApiError, isUnauthorized } from '../api/errors';
 import { authClient } from './auth-client';
 
 /** Сессия истекла на сервере — просим Better Auth перечитать её, и приложение покажет экран входа */
