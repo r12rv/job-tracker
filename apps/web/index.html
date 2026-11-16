@@ -4,7 +4,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#f8fafc" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/logo-192.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <title>Трекер откликов</title>
+    <script>
+      // Тема применяется до первой отрисовки, чтобы страница не мигала светлым. Логика повторяет src/lib/theme.ts
+      try {
+        var stored = localStorage.getItem('job-tracker:theme');
+        var dark = stored === 'dark' || (stored !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.classList.toggle('dark', dark);
+        document.querySelector('meta[name="theme-color"]').content = dark ? '#020617' : '#f8fafc';
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <div id="root"></div>

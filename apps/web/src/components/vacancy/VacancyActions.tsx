@@ -12,7 +12,7 @@ export function VacancyActions({ company, onEdit, onDelete }: VacancyActionsProp
       <button
         type="button"
         onClick={onEdit}
-        className="rounded-md p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-700"
+        className="rounded-md p-2 text-slate-500 dark:text-slate-400 transition-colors hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-200"
         aria-label={`Редактировать: ${company}`}
         title="Редактировать"
       >
@@ -21,7 +21,7 @@ export function VacancyActions({ company, onEdit, onDelete }: VacancyActionsProp
       <button
         type="button"
         onClick={onDelete}
-        className="rounded-md p-2 text-slate-500 transition-colors hover:bg-rose-50 hover:text-rose-600"
+        className="rounded-md p-2 text-slate-500 dark:text-slate-400 transition-colors hover:bg-rose-50 dark:hover:bg-rose-500/10 hover:text-rose-600 dark:hover:text-rose-400"
         aria-label={`Удалить: ${company}`}
         title="Удалить"
       >

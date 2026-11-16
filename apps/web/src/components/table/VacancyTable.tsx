@@ -12,7 +12,7 @@ interface VacancyTableProps {
   onDelete: (vacancy: Vacancy) => void;
 }
 
-const TH = 'px-4 py-3 text-left text-xs font-semibold tracking-wide text-slate-500 uppercase';
+const TH = 'px-4 py-3 text-left text-xs font-semibold tracking-wide text-slate-500 dark:text-slate-400 uppercase';
 
 export function VacancyTable({ vacancies, onStatusChange, onEdit, onDelete }: VacancyTableProps) {
   return (
@@ -31,9 +31,9 @@ export function VacancyTable({ vacancies, onStatusChange, onEdit, onDelete }: Va
       </div>
 
       {/* Планшет и десктоп: таблица */}
-      <div className="hidden overflow-x-auto rounded-2xl bg-white shadow-sm ring-1 ring-slate-200 md:block">
-        <table className="min-w-full divide-y divide-slate-200">
-          <thead className="bg-slate-50">
+      <div className="hidden overflow-x-auto rounded-2xl bg-white dark:bg-slate-900 shadow-sm ring-1 ring-slate-200 dark:ring-slate-800 md:block">
+        <table className="min-w-full divide-y divide-slate-200 dark:divide-slate-800">
+          <thead className="bg-slate-50 dark:bg-slate-800/50">
             <tr>
               <th scope="col" className={TH}>Компания</th>
               <th scope="col" className={TH}>Должность</th>
@@ -43,11 +43,11 @@ export function VacancyTable({ vacancies, onStatusChange, onEdit, onDelete }: Va
               <th scope="col" className={`${TH} sr-only`}>Действия</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
             {vacancies.map((vacancy) => (
-              <tr key={vacancy.id} className="align-top transition-colors hover:bg-slate-50/70">
+              <tr key={vacancy.id} className="align-top transition-colors hover:bg-slate-50/70 dark:hover:bg-slate-800/40">
                 <td className="max-w-56 px-4 py-3">
-                  <div className="truncate font-medium text-slate-900" title={vacancy.company}>
+                  <div className="truncate font-medium text-slate-900 dark:text-slate-100" title={vacancy.company}>
                     {vacancy.company}
                   </div>
                   {vacancy.url && (
@@ -55,7 +55,7 @@ export function VacancyTable({ vacancies, onStatusChange, onEdit, onDelete }: Va
                       href={vacancy.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="mt-0.5 inline-flex max-w-full items-center gap-1 text-xs text-slate-500 hover:text-indigo-600"
+                      className="mt-0.5 inline-flex max-w-full items-center gap-1 text-xs text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400"
                       title={vacancy.url}
                     >
                       <ExternalLinkIcon className="size-3 shrink-0" />
@@ -63,18 +63,18 @@ export function VacancyTable({ vacancies, onStatusChange, onEdit, onDelete }: Va
                     </a>
                   )}
                 </td>
-                <td className="max-w-64 px-4 py-3 text-sm text-slate-700">
+                <td className="max-w-64 px-4 py-3 text-sm text-slate-700 dark:text-slate-300">
                   <div className="truncate" title={vacancy.position}>{vacancy.position}</div>
                   {vacancy.notes && (
-                    <div className="mt-0.5 truncate text-xs text-slate-500" title={vacancy.notes}>
+                    <div className="mt-0.5 truncate text-xs text-slate-500 dark:text-slate-400" title={vacancy.notes}>
                       {vacancy.notes}
                     </div>
                   )}
                 </td>
-                <td className="px-4 py-3 text-sm whitespace-nowrap text-slate-700">
+                <td className="px-4 py-3 text-sm whitespace-nowrap text-slate-700 dark:text-slate-300">
                   {formatSalary(vacancy.salary)}
                 </td>
-                <td className="px-4 py-3 text-sm whitespace-nowrap text-slate-500">
+                <td className="px-4 py-3 text-sm whitespace-nowrap text-slate-500 dark:text-slate-400">
                   <time dateTime={vacancy.appliedAt}>{formatDate(vacancy.appliedAt)}</time>
                 </td>
                 <td className="px-4 py-3">

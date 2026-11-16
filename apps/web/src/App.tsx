@@ -73,8 +73,8 @@ export default function App() {
     <div className="flex min-h-dvh flex-col">
       {renderPage()}
 
-      <footer className="mx-auto flex w-full max-w-7xl justify-center px-4 pb-6 text-xs text-slate-500 sm:px-6">
-        <a href="/privacy.html" className="hover:text-slate-700 hover:underline">
+      <footer className="mx-auto flex w-full max-w-7xl justify-center px-4 pb-6 text-xs text-slate-500 dark:text-slate-400 sm:px-6">
+        <a href="/privacy.html" className="hover:text-slate-700 dark:hover:text-slate-200 hover:underline">
           Политика конфиденциальности
         </a>
       </footer>

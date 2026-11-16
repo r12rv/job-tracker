@@ -48,4 +48,28 @@ test.describe('доступность', () => {
     await expect(page.getByText('Укажите компанию')).toBeVisible();
     await expectNoSeriousViolations(page);
   });
+
+  // Тёмная тема: контраст проверяется отдельно, у неё своя палитра
+  test.describe('тёмная тема', () => {
+    test.use({ colorScheme: 'dark' });
+
+    test('стартовая страница с демо', async ({ page }) => {
+      await page.goto('/');
+      await expect(page.locator('html')).toHaveClass(/dark/);
+      await expect(page.getByRole('heading', { name: 'Попробуйте прямо здесь' })).toBeVisible();
+      await expectNoSeriousViolations(page);
+    });
+
+    test('трекер и форма', async ({ page, signIn, seed }) => {
+      await signIn();
+      await seed([{ company: 'Альфа', notes: 'Заметка' }, { company: 'Бета', status: 'offer' }]);
+      await page.goto('/');
+      await expect(page.getByRole('region', { name: 'Отклик', exact: true })).toBeVisible();
+      await expectNoSeriousViolations(page);
+
+      await page.getByRole('button', { name: 'Добавить вакансию' }).first().click();
+      await expect(page.getByRole('dialog', { name: 'Новая вакансия' })).toBeVisible();
+      await expectNoSeriousViolations(page);
+    });
+  });
 });

@@ -66,7 +66,7 @@ export function TrackerBoard({
           <div className="flex flex-col gap-3">
             <div className="flex items-center justify-between gap-3">
               <ViewTabs value={view} onChange={onViewChange} />
-              <p className="text-sm text-slate-500 tabular-nums">
+              <p className="text-sm text-slate-500 dark:text-slate-400 tabular-nums">
                 {filtered.length} из {vacancies.length}
               </p>
             </div>
