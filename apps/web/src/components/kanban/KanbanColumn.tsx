@@ -25,13 +25,13 @@ export function KanbanColumn({ status, vacancies, onStatusChange, onEdit, onDele
       ref={setNodeRef}
       aria-label={meta.label}
       className={`flex w-[85vw] max-w-80 shrink-0 snap-start flex-col rounded-2xl p-2 transition-colors sm:w-72 lg:w-auto lg:max-w-none lg:min-w-0 lg:flex-1 ${
-        active ? 'bg-indigo-100/70' : 'bg-slate-100/80'
+        active ? 'bg-indigo-100/70 dark:bg-indigo-500/15' : 'bg-slate-100/80 dark:bg-slate-900/60'
       }`}
     >
       <header className="flex items-center gap-2 px-2 pt-1 pb-2.5">
         <span className={`size-2 rounded-full ${meta.dot}`} />
-        <h2 className="text-sm font-semibold text-slate-700">{meta.label}</h2>
-        <span className="ml-auto rounded-full bg-white px-2 py-0.5 text-xs font-medium text-slate-500 ring-1 ring-slate-200">
+        <h2 className="text-sm font-semibold text-slate-700 dark:text-slate-300">{meta.label}</h2>
+        <span className="ml-auto rounded-full bg-white dark:bg-slate-900 px-2 py-0.5 text-xs font-medium text-slate-500 dark:text-slate-400 ring-1 ring-slate-200 dark:ring-slate-800">
           {vacancies.length}
         </span>
       </header>
@@ -53,7 +53,7 @@ export function KanbanColumn({ status, vacancies, onStatusChange, onEdit, onDele
           )}
         </SortableContext>
         {vacancies.length === 0 && (
-          <p className="rounded-xl border border-dashed border-slate-300 px-3 py-6 text-center text-xs text-slate-600">
+          <p className="rounded-xl border border-dashed border-slate-300 dark:border-slate-700 px-3 py-6 text-center text-xs text-slate-600 dark:text-slate-400">
             {active ? 'Отпустите здесь' : 'Пусто'}
           </p>
         )}

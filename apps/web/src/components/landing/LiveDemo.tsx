@@ -66,15 +66,15 @@ export function LiveDemo() {
   };
 
   return (
-    <div className="overflow-hidden rounded-2xl bg-white shadow-xl ring-1 shadow-slate-900/5 ring-slate-200">
+    <div className="overflow-hidden rounded-2xl bg-white dark:bg-slate-900 shadow-xl ring-1 shadow-slate-900/5 ring-slate-200 dark:ring-slate-800">
       {/* Рамка «окна приложения»: отделяет демо от остальной страницы */}
-      <div className="flex items-center gap-3 border-b border-slate-200 bg-slate-100/80 px-4 py-2.5">
+      <div className="flex items-center gap-3 border-b border-slate-200 dark:border-slate-800 bg-slate-100/80 dark:bg-slate-900/60 px-4 py-2.5">
         <div className="flex gap-1.5" aria-hidden="true">
           <span className="size-2.5 rounded-full bg-rose-400" />
           <span className="size-2.5 rounded-full bg-amber-400" />
           <span className="size-2.5 rounded-full bg-emerald-400" />
         </div>
-        <span className="truncate text-xs font-medium text-slate-600">Демо · примеры вакансий, ничего не сохраняется</span>
+        <span className="truncate text-xs font-medium text-slate-600 dark:text-slate-400">Демо · примеры вакансий, ничего не сохраняется</span>
         <Button variant="ghost" size="sm" className="ml-auto" onClick={reset}>
           <ResetIcon className="size-3.5" />
           <span className="hidden sm:inline">Сбросить демо</span>
@@ -82,7 +82,7 @@ export function LiveDemo() {
         </Button>
       </div>
 
-      <div className="flex flex-col gap-5 bg-slate-50 p-3 sm:p-5">
+      <div className="flex flex-col gap-5 bg-slate-50 dark:bg-slate-800/50 p-3 sm:p-5">
         <TrackerBoard
           key={resetKey}
           vacancies={vacancies}

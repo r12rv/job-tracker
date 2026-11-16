@@ -22,7 +22,7 @@ export function SignInButton({ className = '', label = 'Войти через Go
         });
       }}
     >
-      <GoogleIcon className="size-5 rounded-full bg-white p-0.5" />
+      <GoogleIcon className="size-5 rounded-full bg-white dark:bg-slate-900 p-0.5" />
       {busy ? 'Переход в Google…' : label}
     </Button>
   );

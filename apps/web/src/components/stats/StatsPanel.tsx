@@ -17,15 +17,15 @@ export function StatsPanel({ stats }: StatsPanelProps) {
       <StatCard
         label="Дошли до собеседования"
         value={String(stats.reachedInterview)}
-        accent="text-amber-600"
+        accent="text-amber-600 dark:text-amber-400"
       />
       <StatCard
         label="Процент приглашений"
         value={`${stats.interviewRate}%`}
         hint="собеседования / отклики"
-        accent="text-indigo-600"
+        accent="text-indigo-600 dark:text-indigo-400"
       />
-      <StatCard label="Офферы" value={String(stats.offers)} accent="text-emerald-600" />
+      <StatCard label="Офферы" value={String(stats.offers)} accent="text-emerald-600 dark:text-emerald-400" />
     </dl>
   );
 }

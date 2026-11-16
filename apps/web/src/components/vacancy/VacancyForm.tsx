@@ -100,7 +100,7 @@ export function VacancyForm({ initial, onSubmit }: VacancyFormProps) {
       />
 
       <fieldset className="sm:col-span-2">
-        <legend className="mb-1.5 text-sm font-medium text-slate-700">Зарплатная вилка</legend>
+        <legend className="mb-1.5 text-sm font-medium text-slate-700 dark:text-slate-300">Зарплатная вилка</legend>
         <div className="grid grid-cols-[1fr_1fr_auto] gap-2">
           <TextField
             label="От"

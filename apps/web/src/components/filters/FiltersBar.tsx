@@ -30,20 +30,20 @@ export function FiltersBar({ filters, counts, total, onChange }: FiltersBarProps
   return (
     <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
       <div className="relative lg:w-72">
-        <SearchIcon className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-500" />
+        <SearchIcon className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-500 dark:text-slate-400" />
         <input
           type="search"
           value={filters.search}
           onChange={(event) => { onChange({ ...filters, search: event.target.value }); }}
           placeholder="Поиск по компании"
           aria-label="Поиск по компании"
-          className="block h-10 w-full rounded-lg border-0 bg-white pr-9 pl-9 text-base text-slate-900 shadow-sm ring-1 ring-slate-300 ring-inset placeholder:text-slate-400 focus:ring-2 focus:ring-indigo-600 focus:outline-none sm:text-sm [&::-webkit-search-cancel-button]:hidden"
+          className="block h-10 w-full rounded-lg border-0 bg-white dark:bg-slate-900 pr-9 pl-9 text-base text-slate-900 dark:text-slate-100 shadow-sm ring-1 ring-slate-300 dark:ring-slate-700 ring-inset placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-indigo-600 dark:focus:ring-indigo-500 focus:outline-none sm:text-sm [&::-webkit-search-cancel-button]:hidden"
         />
         {filters.search && (
           <button
             type="button"
             onClick={() => { onChange({ ...filters, search: '' }); }}
-            className="absolute top-1/2 right-2 -translate-y-1/2 rounded p-1 text-slate-500 hover:text-slate-700"
+            className="absolute top-1/2 right-2 -translate-y-1/2 rounded p-1 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
             aria-label="Очистить поиск"
           >
             <XIcon className="size-4" />
@@ -67,13 +67,13 @@ export function FiltersBar({ filters, counts, total, onChange }: FiltersBarProps
               onClick={() => { onChange({ ...filters, status: option.value }); }}
               className={`inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full px-3 text-sm font-medium whitespace-nowrap transition-colors ${
                 active
-                  ? 'bg-slate-900 text-white'
-                  : 'bg-white text-slate-600 ring-1 ring-slate-200 ring-inset hover:bg-slate-50'
+                  ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900'
+                  : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 ring-1 ring-slate-200 dark:ring-slate-800 ring-inset hover:bg-slate-50 dark:hover:bg-slate-800/60'
               }`}
             >
               {option.dot && <span className={`size-1.5 rounded-full ${option.dot}`} />}
               {option.label}
-              <span className={`tabular-nums ${active ? 'text-slate-300' : 'text-slate-500'}`}>{option.count}</span>
+              <span className={`tabular-nums ${active ? 'text-slate-300 dark:text-slate-600' : 'text-slate-500 dark:text-slate-400'}`}>{option.count}</span>
             </button>
           );
         })}

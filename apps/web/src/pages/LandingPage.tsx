@@ -42,13 +42,13 @@ export function LandingPage() {
       <main className="flex-1">
         {/* Первый экран и демо занимают всю высоту окна под шапкой (h-14 / sm:h-16 плюс 1px нижней границы) */}
         <section className="mx-auto flex min-h-[calc(100dvh-3.5rem-1px)] max-w-3xl flex-col justify-center px-4 py-12 text-center sm:min-h-[calc(100dvh-4rem-1px)] sm:px-6">
-          <p className="inline-flex self-center rounded-full bg-indigo-50 px-3 py-1 text-xs font-medium text-indigo-700 ring-1 ring-indigo-600/15 ring-inset">
+          <p className="inline-flex self-center rounded-full bg-indigo-50 dark:bg-indigo-500/10 px-3 py-1 text-xs font-medium text-indigo-700 dark:text-indigo-300 ring-1 ring-indigo-600/15 dark:ring-indigo-400/25 ring-inset">
             Для тех, кто ищет работу
           </p>
-          <h2 className="mt-4 text-3xl font-semibold tracking-tight text-balance text-slate-900 sm:text-5xl">
+          <h2 className="mt-4 text-3xl font-semibold tracking-tight text-balance text-slate-900 dark:text-slate-100 sm:text-5xl">
             Все отклики на вакансии — в одном месте
           </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-base text-pretty text-slate-600 sm:text-lg">
+          <p className="mx-auto mt-4 max-w-2xl text-base text-pretty text-slate-600 dark:text-slate-400 sm:text-lg">
             Записывайте, куда откликнулись, двигайте вакансии по этапам от отклика до оффера и смотрите,
             сколько откликов превращаются в собеседования.
           </p>
@@ -56,12 +56,12 @@ export function LandingPage() {
             <SignInButton />
             <a
               href="#demo"
-              className="inline-flex h-11 items-center rounded-lg px-4 text-base font-medium text-slate-700 hover:bg-slate-100"
+              className="inline-flex h-11 items-center rounded-lg px-4 text-base font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
             >
               Посмотреть демо ↓
             </a>
           </div>
-          <p className="mt-3 text-sm text-slate-500">Бесплатно. Нужен только аккаунт Google.</p>
+          <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">Бесплатно. Нужен только аккаунт Google.</p>
         </section>
 
         <section
@@ -69,33 +69,33 @@ export function LandingPage() {
           className="mx-auto flex min-h-[calc(100dvh-3.5rem-1px)] max-w-7xl scroll-mt-[57px] flex-col justify-center px-4 py-8 sm:min-h-[calc(100dvh-4rem-1px)] sm:scroll-mt-[65px] sm:px-6"
         >
           <div className="mb-5 text-center">
-            <h2 className="text-xl font-semibold text-slate-900 sm:text-2xl">Попробуйте прямо здесь</h2>
-            <p className="mt-1.5 text-sm text-slate-600 sm:text-base">
+            <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100 sm:text-2xl">Попробуйте прямо здесь</h2>
+            <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-400 sm:text-base">
               Это настоящий интерфейс с примерами: меняйте статусы, переключайте вид, ищите по компании.
             </p>
           </div>
           <LiveDemo />
         </section>
 
-        <section className="border-y border-slate-200 bg-white">
+        <section className="border-y border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
           <div className="mx-auto grid max-w-7xl gap-8 px-4 py-14 sm:grid-cols-2 sm:px-6 lg:grid-cols-4">
             {FEATURES.map((feature) => (
               <div key={feature.title}>
-                <span className="flex size-10 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
+                <span className="flex size-10 items-center justify-center rounded-xl bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
                   {feature.icon}
                 </span>
-                <h3 className="mt-4 font-semibold text-slate-900">{feature.title}</h3>
-                <p className="mt-1.5 text-sm text-slate-600">{feature.text}</p>
+                <h3 className="mt-4 font-semibold text-slate-900 dark:text-slate-100">{feature.title}</h3>
+                <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-400">{feature.text}</p>
               </div>
             ))}
           </div>
         </section>
 
         <section className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6 sm:py-20">
-          <h2 className="text-2xl font-semibold text-balance text-slate-900 sm:text-3xl">
+          <h2 className="text-2xl font-semibold text-balance text-slate-900 dark:text-slate-100 sm:text-3xl">
             Готовы навести порядок в откликах?
           </h2>
-          <p className="mt-3 text-slate-600">Вход займёт пару секунд — и можно добавлять первую вакансию.</p>
+          <p className="mt-3 text-slate-600 dark:text-slate-400">Вход займёт пару секунд — и можно добавлять первую вакансию.</p>
           <SignInButton className="mt-6" label="Начать бесплатно" />
         </section>
       </main>

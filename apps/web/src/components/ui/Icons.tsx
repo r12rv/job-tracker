@@ -81,12 +81,6 @@ export const GoogleIcon = ({ className = 'size-4', ...props }: IconProps) => (
   </svg>
 );
 
-export const BriefcaseIcon = (props: IconProps) => (
-  <Icon {...props}>
-    <rect x="2" y="7" width="20" height="14" rx="2" />
-    <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2M2 13h20" />
-  </Icon>
-);
 
 export const HistoryIcon = (props: IconProps) => (
   <Icon {...props}>
@@ -114,5 +108,24 @@ export const ResetIcon = (props: IconProps) => (
   <Icon {...props}>
     <path d="M3 12a9 9 0 1 0 2.6-6.4L3 8" />
     <path d="M3 3v5h5" />
+  </Icon>
+);
+
+export const ChevronDownIcon = (props: IconProps) => (
+  <Icon {...props}>
+    <path d="m6 9 6 6 6-6" />
+  </Icon>
+);
+
+export const SunIcon = (props: IconProps) => (
+  <Icon {...props}>
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+  </Icon>
+);
+
+export const MoonIcon = (props: IconProps) => (
+  <Icon {...props}>
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" />
   </Icon>
 );

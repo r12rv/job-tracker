@@ -18,16 +18,16 @@ export function VacancyCard({ vacancy, onStatusChange, onEdit, onDelete, lifted 
 
   return (
     <article
-      className={`group rounded-xl bg-white p-3.5 ring-1 transition-shadow ${
-        lifted ? 'rotate-2 cursor-grabbing shadow-xl ring-indigo-300' : 'shadow-sm ring-slate-200 hover:shadow-md'
+      className={`group rounded-xl bg-white dark:bg-slate-900 p-3.5 ring-1 transition-shadow ${
+        lifted ? 'rotate-2 cursor-grabbing shadow-xl ring-indigo-300 dark:ring-indigo-500/60' : 'shadow-sm ring-slate-200 dark:ring-slate-800 hover:shadow-md'
       }`}
     >
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
-          <h3 className="truncate font-semibold text-slate-900" title={vacancy.company}>
+          <h3 className="truncate font-semibold text-slate-900 dark:text-slate-100" title={vacancy.company}>
             {vacancy.company}
           </h3>
-          <p className="truncate text-sm text-slate-600" title={vacancy.position}>
+          <p className="truncate text-sm text-slate-600 dark:text-slate-400" title={vacancy.position}>
             {vacancy.position}
           </p>
         </div>
@@ -41,11 +41,11 @@ export function VacancyCard({ vacancy, onStatusChange, onEdit, onDelete, lifted 
       </div>
 
       {hasSalary && (
-        <p className="mt-2 text-sm font-medium text-slate-800">{formatSalary(vacancy.salary)}</p>
+        <p className="mt-2 text-sm font-medium text-slate-800 dark:text-slate-200">{formatSalary(vacancy.salary)}</p>
       )}
 
       {vacancy.notes && (
-        <p className="mt-2 line-clamp-2 text-xs whitespace-pre-line text-slate-500">{vacancy.notes}</p>
+        <p className="mt-2 line-clamp-2 text-xs whitespace-pre-line text-slate-500 dark:text-slate-400">{vacancy.notes}</p>
       )}
 
       <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
@@ -54,13 +54,13 @@ export function VacancyCard({ vacancy, onStatusChange, onEdit, onDelete, lifted 
           label={`Статус: ${vacancy.company}`}
           onChange={(status) => { onStatusChange(vacancy.id, status); }}
         />
-        <div className="flex items-center gap-2 text-xs text-slate-500">
+        <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
           {vacancy.url && (
             <a
               href={vacancy.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex max-w-32 items-center gap-1 truncate hover:text-indigo-600"
+              className="inline-flex max-w-32 items-center gap-1 truncate hover:text-indigo-600 dark:hover:text-indigo-400"
               title={vacancy.url}
             >
               <ExternalLinkIcon className="size-3.5 shrink-0" />
