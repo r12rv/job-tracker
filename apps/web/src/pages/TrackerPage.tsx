@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { EmptyState } from '../components/layout/EmptyState';
 import { Header } from '../components/layout/Header';
 import { TrackerBoard } from '../components/tracker/TrackerBoard';
+import { TrackerSkeleton } from '../components/tracker/TrackerSkeleton';
 import { Button } from '../components/ui/Button';
 import { ConfirmDialog } from '../components/ui/ConfirmDialog';
 import { PlusIcon } from '../components/ui/Icons';
@@ -14,21 +15,6 @@ type EditorState = { mode: 'closed' } | { mode: 'create' } | { mode: 'edit'; vac
 
 function parseViewMode(raw: unknown): ViewMode {
   return raw === 'table' ? 'table' : 'kanban';
-}
-
-/** Заглушка на время первой загрузки: повторяет раскладку страницы, чтобы ничего не прыгало */
-function TrackerSkeleton() {
-  return (
-    <div className="flex flex-col gap-5" aria-busy="true" aria-label="Загрузка вакансий">
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        {Array.from({ length: 4 }, (_, index) => (
-          <div key={index} className="h-[106px] animate-pulse rounded-2xl bg-slate-200/70" />
-        ))}
-      </div>
-      <div className="h-10 w-56 animate-pulse rounded-lg bg-slate-200/70" />
-      <div className="h-72 animate-pulse rounded-2xl bg-slate-200/70" />
-    </div>
-  );
 }
 
 interface TrackerPageProps {
