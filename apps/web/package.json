@@ -15,7 +15,7 @@
     "@dnd-kit/utilities": "^3.2.2",
     "@job-tracker/shared": "*",
     "@tanstack/react-query": "^5.107.1",
-    "better-auth": "^1.7.20",
+    "better-auth": "^1.7.25",
     "hono": "^4.13.18",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
